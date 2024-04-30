@@ -1,0 +1,3 @@
+[submodule "modules/katana-common"]
+	path = modules/katana-common
+	url = git@ent.github.com:bosinc/katana-common.git
