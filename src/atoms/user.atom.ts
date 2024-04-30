@@ -19,7 +19,7 @@ export const useAuth = () => {
 
   useEffect(() => {
     checkLogin().then(() => {});
-  }, []);
+  }, [checkLogin]);
 
   return { checkLogin, token, isLogin: !!token };
 };
@@ -34,9 +34,8 @@ export const useUser = () => {
     if (initStatusRef.current) return;
     initStatusRef.current = true;
     const tokenUser = await tokenUtil.parse();
-    console.log({ tokenUser });
     updateUser(tokenUser);
-  }, []);
+  }, [updateUser]);
 
   useEffect(() => {
     if (!user?.userId && !isEmpty(token)) {

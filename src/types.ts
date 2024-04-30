@@ -3,8 +3,6 @@ export enum MessageActionType {
   USER_ACTION = "user_action",
 }
 
-export type RecordAny = Record<string, any>;
-
 export enum MerchantType {
   PEAR_OFFICIAL = "PEAR_OFFICIAL",
   ONBOARDING = "ONBOARDING",

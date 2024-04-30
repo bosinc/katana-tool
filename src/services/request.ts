@@ -6,6 +6,18 @@ import axios, {
 import tokenUtil from "../utils/token.ts";
 import { BASE_SERVER_URL } from "../utils/common.ts";
 
+export class ApiError extends Error {
+  constructor(message: string, apiMessage: string, response: API.Response) {
+    super(message);
+    this.apiMessage = apiMessage;
+    this.response = response;
+  }
+
+  apiMessage?: string;
+
+  response: API.Response;
+}
+
 export const getAuthorization = (
   token?: string,
 ): AxiosRequestConfig["headers"] =>
@@ -39,7 +51,15 @@ katanaAxios.interceptors.response.use(
     }
     return res.data.data;
   },
-  () => {},
+  ({ response, message }) => {
+    const { code, message: apiMessage, data } = response.data;
+    return Promise.resolve(
+      new ApiError(message, apiMessage, {
+        status: code,
+        data,
+      } as unknown as API.Response),
+    );
+  },
 );
 
 export default katanaAxios;

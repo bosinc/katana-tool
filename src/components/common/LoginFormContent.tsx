@@ -1,9 +1,8 @@
 import { useCallback, useRef } from "react";
 import FormItem from "../login/FormItem.tsx";
 import { Button, Stack, Typography } from "@mui/material";
-import { RecordAny } from "../../types.ts";
 import useAutoLoading from "../../hooks/useAutoLoading.ts";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { login, LoginRequest } from "../../services/login.ts";
@@ -23,7 +22,7 @@ const LoginFormContent = <T extends LoginRequest>({
   onFailed,
   scheme,
 }: LoginFormContentProps<T>) => {
-  // @ts-ignore -- to do
+  // @ts-expect-error -- to do
   const methods = useForm<T>({ resolver: yupResolver(scheme) });
   const { checkLogin } = useAuth();
   const formRef = useRef(null);
@@ -46,7 +45,12 @@ const LoginFormContent = <T extends LoginRequest>({
 
   return (
     <FormProvider {...methods}>
-      <form ref={formRef} onSubmit={methods.handleSubmit(submitForm)}>
+      <form
+        ref={formRef}
+        onSubmit={methods.handleSubmit(
+          submitForm as unknown as SubmitHandler<T>,
+        )}
+      >
         <Stack direction={direction} justifyContent="center" gap={2}>
           <FormItem
             label={"Pear账号"}

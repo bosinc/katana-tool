@@ -1,13 +1,13 @@
 import { startTransition, useCallback, useState } from "react";
 
-export type Callback<T extends unknown> =
+export type Callback<T extends RecordAny> =
   | undefined
-  | ((data: T, ...args: unknown[]) => Promise<void | undefined | T>);
+  | ((data: T, ...args: (T | undefined)[]) => Promise<void | T>);
 
-const useAutoLoading = <T extends unknown>(callback?: Callback<T>) => {
+const useAutoLoading = <T extends RecordAny>(callback?: Callback<T>) => {
   const [loading, setIsLoading] = useState<boolean>(false);
   const run = useCallback(
-    async (data: T, ...args: (T | unknown)[]) => {
+    async (data: T, ...args: T[]) => {
       if (callback) {
         startTransition(() => {
           setIsLoading(true);

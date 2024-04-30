@@ -11,15 +11,15 @@ import {
   ProductCardRateAndOrders,
   ProductCardTitle,
   ProductStoreCTA,
-} from "./CardComponents.tsx";
-import { Product } from "../../services/product.ts";
+} from "./CardComponents";
+import { AliProduct } from "../../services/product";
 import { useMemo } from "react";
 import currency from "currency.js";
-import { CARD_WIDTH } from "../../utils/common.ts";
+import { CARD_WIDTH } from "../../utils/common";
 import { head } from "ramda";
-import { useProduct, useProductChecked } from "../../atoms/product.atom.ts";
+import { useProduct, useProductChecked } from "../../atoms/product.atom";
 
-const ProductCard = ({ product }: { product: Product }) => {
+const ProductCard = ({ product }: { product: AliProduct }) => {
   const isChecked = useProductChecked(product);
   const { selectProduct } = useProduct();
 

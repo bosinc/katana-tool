@@ -4,7 +4,6 @@ import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from "lz-string";
-import { RecordAny } from "../types.ts";
 import { cookieUrl, DOMAIN_WEB_URL } from "./common.ts";
 
 const cookiePrefix = "alg:HS256,typ:JWT|";
@@ -54,7 +53,7 @@ export const cookieStorage = {
   },
   async set(
     key: string,
-    value: any,
+    value: string | undefined,
     options: Partial<chrome.cookies.SetDetails>,
   ) {
     await chrome.cookies.remove({ name: key, url: cookieUrl });

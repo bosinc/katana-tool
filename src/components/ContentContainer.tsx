@@ -1,15 +1,16 @@
-import { Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import ProductCard from "./card/ProductCard.tsx";
-import BaseImage from "./card/BaseImage.tsx";
 import { useProduct } from "../atoms/product.atom.ts";
 
 const ContentContainer = () => {
-  const { products } = useProduct();
+  const { products, initProducts } = useProduct();
 
   return (
     <Stack>
       <Stack sx={{ p: 2, gap: 2 }}>
-        <BaseImage />
+        <Button onClick={initProducts}>获取信息</Button>
+
+        {/*<BaseImage />*/}
         <Stack
           sx={{
             maxWidth: "100%",

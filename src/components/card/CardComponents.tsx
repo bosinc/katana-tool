@@ -9,9 +9,6 @@ export const ProductCardTitle = ({
   title: string;
   link?: string;
 }) => {
-  // const handleToProductDetail = useCallback((index: number) => {
-  //   window.open(`https://www.baidu.com/s=${index}`, "_blank");
-  // }, []);
   return (
     <Typography
       gutterBottom

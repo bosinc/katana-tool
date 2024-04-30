@@ -11,7 +11,7 @@ const LoginBaseInfo = () => {
   const handleLogout = useCallback(async () => {
     await logout();
     await checkLogin();
-  }, []);
+  }, [checkLogin]);
 
   return (
     <Stack

@@ -1,19 +1,20 @@
-import {
-  Product,
-  searchAliProduct,
-  // searchProducts,
-} from "../services/product.ts";
+import { AliProduct, searchAliProduct } from "../services/product.ts";
 import { atom, useAtom, useAtomValue } from "jotai";
 import { splitAtom } from "jotai/utils";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { clone, findIndex, insert, isEmpty, product, remove } from "ramda";
+import { clone, findIndex, insert, isEmpty, remove } from "ramda";
 import { commonSyncStorage } from "../utils/storage.ts";
 import { MessageActionType, StorageKeys } from "../types.ts";
+import { useSnackbar } from "notistack";
+import {
+  DEFAULT_SNACKBAR_ANCHOR_ORIGIN,
+  DEFAULT_SNACKBAR_DURATION,
+} from "../utils/common.ts";
 
-export const productListAtom = atom<Product[]>([]);
+export const productListAtom = atom<AliProduct[]>([]);
 
 export const splitProductListAtom = splitAtom(productListAtom);
-export const selectedProductsAtom = atom<Product[]>([]);
+export const selectedProductsAtom = atom<AliProduct[]>([]);
 
 export const useBaseUrl = () => {
   const [baseUrl, setBaseUrl] = useState("");
@@ -45,12 +46,14 @@ export const useProduct = () => {
   const [selectedProducts, updateSelectedProducts] =
     useAtom(selectedProductsAtom);
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const { baseUrl, getImageBlob } = useBaseUrl();
 
   const initFetchRef = useRef(false);
 
   const handleSelectProduct = useCallback(
-    (product: Product) => {
+    (product: AliProduct) => {
       const cloneSelectedProducts = clone(selectedProducts);
       const findProductIndex = findIndex(
         (selectedProduct) =>
@@ -65,27 +68,39 @@ export const useProduct = () => {
         updateSelectedProducts(updateList);
       }
     },
-    [selectedProducts, product, updateSelectedProducts],
+    [selectedProducts, updateSelectedProducts],
   );
 
   const initialProducts = useCallback(async () => {
-    if (initFetchRef.current) return;
-    initFetchRef.current = true;
-    const imageBlob = await getImageBlob();
-    const data = await searchAliProduct(imageBlob);
-    console.log({ data });
-    updateProducts(data.data.products);
-  }, [baseUrl]);
+    try {
+      if (initFetchRef.current) return;
+      initFetchRef.current = true;
+      const imageBlob = await getImageBlob();
+
+      if (imageBlob.size > 100 * 1000) {
+        enqueueSnackbar("图片尺寸太大, 无法获取数据! 请更新图片", {
+          variant: "error",
+          anchorOrigin: DEFAULT_SNACKBAR_ANCHOR_ORIGIN,
+          autoHideDuration: DEFAULT_SNACKBAR_DURATION,
+        });
+      }
+      const data = await searchAliProduct(imageBlob);
+      updateProducts(data.data.products);
+    } finally {
+      initFetchRef.current = false;
+    }
+  }, [enqueueSnackbar, getImageBlob, updateProducts]);
 
   useEffect(() => {
     if (products.length <= 0 && !isEmpty(baseUrl)) {
-      initialProducts().then(() => {
-        initFetchRef.current = false;
-      });
+      initialProducts().then(() => {});
+    } else {
+      initFetchRef.current = false;
     }
-  }, [initialProducts, baseUrl]);
+  }, [initialProducts, baseUrl, products.length]);
 
   return {
+    initProducts: initialProducts,
     products,
     productAtoms: splitProductList,
     updateProducts,
@@ -97,7 +112,7 @@ export const useProduct = () => {
   };
 };
 
-export const useProductChecked = (product: Product) => {
+export const useProductChecked = (product: AliProduct) => {
   const selectedProducts = useAtomValue(selectedProductsAtom);
   return useMemo(() => {
     const findProductIndex = findIndex(

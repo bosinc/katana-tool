@@ -1,22 +1,21 @@
-import data from "./data.json";
 import katanaAxios from "./request.ts";
 import { DEFAULT_SEARCH_PRODUCT_COUNT } from "../utils/common.ts";
+import {Product} from "dto/product";
 
-export type Product = (typeof data.data.products)[0];
-
-export const searchProducts = async () => {
-  return data;
+export type AliProduct = {
+  product: Product;
+  productDetailUrl: string;
 };
 
 export const searchAliProduct = async (
   imageBlob: Blob,
   count = DEFAULT_SEARCH_PRODUCT_COUNT,
 ) => {
+  const formData = new FormData();
+  formData.append("file", imageBlob);
   return katanaAxios.post(
     `/aliexpress/image/search?productCnt=${count}`,
-    {
-      file: imageBlob,
-    },
+    formData,
     { headers: { "Content-Type": imageBlob.type } },
   );
 };

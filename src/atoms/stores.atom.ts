@@ -33,7 +33,7 @@ export const useStore = () => {
         : null;
       updateSelectStore(storageStore ?? items[0] ?? null);
     }
-  }, [updateStores, updateSelectStore, setLoading]);
+  }, [updateStores, updateSelectStore, setLoading, selectStore]);
 
   const handleSelectStore = useCallback(
     async (storeId: string) => {
