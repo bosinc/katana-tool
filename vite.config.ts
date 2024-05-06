@@ -7,6 +7,12 @@ import { resolve } from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), crx({ manifest: manifest as ManifestV3Export })],
+  resolve: {
+    alias: {
+      "@katana-common": resolve(__dirname, "modules/katana-common"),
+      "@components": resolve(__dirname, "src/components"),
+    },
+  },
   build: {
     rollupOptions: {
       input: {

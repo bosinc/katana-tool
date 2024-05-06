@@ -13,7 +13,7 @@ interface FormItemProps extends StandardTextFieldProps {
   direction?: "row" | "column";
 }
 
-const FormItem = ({ label, name, direction }: FormItemProps) => {
+const FormItem = ({ label, name, direction, ...props }: FormItemProps) => {
   const {
     control,
     formState: { errors },
@@ -36,6 +36,7 @@ const FormItem = ({ label, name, direction }: FormItemProps) => {
         render={({ field }) => {
           return (
             <TextField
+              {...props}
               {...field}
               hiddenLabel
               size={"small"}

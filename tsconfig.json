@@ -19,7 +19,11 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["@types/chrome", "@types/node"]
+    "types": ["@types/chrome", "@types/node"],
+    "paths": {
+      "@katana-common/*": ["./modules/katana-common/*"],
+      "@components/*": ["./src/components/*"]
+    }
   },
   "exclude": ["node_modules"],
   "include": [

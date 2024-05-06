@@ -1,16 +1,11 @@
 import katanaAxios from "./request.ts";
 import { DEFAULT_SEARCH_PRODUCT_COUNT } from "../utils/common.ts";
-import {Product} from "dto/product";
-
-export type AliProduct = {
-  product: Product;
-  productDetailUrl: string;
-};
+import { ImageSearchResponseItem } from "@katana-common/response/aliexpress.response.ts";
 
 export const searchAliProduct = async (
   imageBlob: Blob,
   count = DEFAULT_SEARCH_PRODUCT_COUNT,
-) => {
+): Promise<{ products: ImageSearchResponseItem[]; total: number }> => {
   const formData = new FormData();
   formData.append("file", imageBlob);
   return katanaAxios.post(
@@ -21,7 +16,7 @@ export const searchAliProduct = async (
 };
 
 export const saveProductToShop = async (data: {
-  storeId: string;
+  merchantId: string;
   productIds: string[];
 }) => {
   return katanaAxios.post("/aliexpress/product/save", data);

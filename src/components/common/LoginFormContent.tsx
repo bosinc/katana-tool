@@ -77,7 +77,7 @@ const LoginFormContent = <T extends LoginRequest>({
             disabled={loading}
           >
             <Typography variant={"body2"} fontWeight={600}>
-              Login
+              登录
             </Typography>
           </Button>
         </Stack>

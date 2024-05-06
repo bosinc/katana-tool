@@ -1,5 +1,5 @@
-import { Avatar, CardMedia, Checkbox, Stack, Typography } from "@mui/material";
-import { Grade } from "@mui/icons-material";
+import { CardMedia, Checkbox, Stack, Typography } from "@mui/material";
+import { Grade, Store } from "@mui/icons-material";
 import { CARD_MEDIA_HEIGHT } from "../../utils/common.ts";
 
 export const ProductCardTitle = ({
@@ -62,18 +62,25 @@ export const ProductCardRateAndOrders = () => {
   );
 };
 
-export const ProductStoreCTA = () => {
+export const ProductStoreCTA = ({ link }: { link: string }) => {
   return (
     <Stack
+      component={"a"}
       direction={"row"}
       alignItems={"center"}
       gap={0.5}
-      sx={{ fontSize: 0, cursor: "pointer" }}
+      sx={{
+        fontSize: 0,
+        cursor: "pointer",
+        textDecoration: "none",
+        "&:hover": {
+          textDecoration: "underline",
+        },
+      }}
+      href={link}
+      target="_blank"
     >
-      <Avatar
-        src={"https://th.wallhaven.cc/lg/3l/3led2d.jpg"}
-        sx={{ width: 20, height: 20, fontSize: 0 }}
-      />
+      <Store sx={{ fontSize: 14, color: "#999" }} />
       <Typography
         variant={"body2"}
         fontSize={10}
@@ -89,7 +96,7 @@ export const ProductStoreCTA = () => {
           textAlign: "left",
         }}
       >
-        KZE TAPE Official Store
+        查看店铺
       </Typography>
     </Stack>
   );
@@ -98,31 +105,35 @@ export const ProductStoreCTA = () => {
 export const ProductCardMedia = ({
   src,
   isChecked,
+  canSelect,
 }: {
   src: string;
   isChecked?: boolean;
+  canSelect?: boolean;
 }) => {
   return (
     <CardMedia sx={{ height: CARD_MEDIA_HEIGHT }} image={src}>
-      <Stack
-        sx={{
-          p: 1,
-          bgcolor: "rgba(0,0,0,.5)",
-          position: "absolute",
-          right: 0,
-          top: 0,
-          borderBottomLeftRadius: 12,
-        }}
-      >
-        <Checkbox
+      {canSelect ? (
+        <Stack
           sx={{
-            p: 0,
-            color: "white",
+            p: 1,
+            bgcolor: "rgba(0,0,0,.8)",
+            position: "absolute",
+            right: 0,
+            top: 0,
+            borderBottomLeftRadius: 12,
           }}
-          color="default"
-          checked={isChecked}
-        />
-      </Stack>
+        >
+          <Checkbox
+            sx={{
+              p: 0,
+              color: "white",
+            }}
+            color="default"
+            checked={isChecked}
+          />
+        </Stack>
+      ) : null}
     </CardMedia>
   );
 };

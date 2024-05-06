@@ -1,23 +1,13 @@
+import { MerchantType, UserRole } from "dto/enum";
+
 export enum MessageActionType {
   IMAGE_ACTION = "image_action",
   USER_ACTION = "user_action",
 }
 
-export enum MerchantType {
-  PEAR_OFFICIAL = "PEAR_OFFICIAL",
-  ONBOARDING = "ONBOARDING",
-  PEAR_DEFAULT = "PEAR_DEFAULT",
-  PEAR_TESTING = "PEAR_TESTING",
-}
-
 export enum StorePlatform {
   SHOPIFY = "SHOPIFY",
   PEAR = "PEAR",
-}
-
-export enum UserRole {
-  CONSUMER = "CONSUMER",
-  PROMOTER = "PROMOTER",
 }
 
 export type TokenState = {

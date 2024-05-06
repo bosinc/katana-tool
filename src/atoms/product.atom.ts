@@ -1,4 +1,4 @@
-import { AliProduct, searchAliProduct } from "../services/product.ts";
+import { searchAliProduct } from "../services/product.ts";
 import { atom, useAtom, useAtomValue } from "jotai";
 import { splitAtom } from "jotai/utils";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -10,11 +10,12 @@ import {
   DEFAULT_SNACKBAR_ANCHOR_ORIGIN,
   DEFAULT_SNACKBAR_DURATION,
 } from "../utils/common.ts";
+import { ImageSearchResponseItem } from "@katana-common/response/aliexpress.response.ts";
 
-export const productListAtom = atom<AliProduct[]>([]);
+export const productListAtom = atom<ImageSearchResponseItem[]>([]);
 
 export const splitProductListAtom = splitAtom(productListAtom);
-export const selectedProductsAtom = atom<AliProduct[]>([]);
+export const selectedProductsAtom = atom<ImageSearchResponseItem[]>([]);
 
 export const useBaseUrl = () => {
   const [baseUrl, setBaseUrl] = useState("");
@@ -53,7 +54,7 @@ export const useProduct = () => {
   const initFetchRef = useRef(false);
 
   const handleSelectProduct = useCallback(
-    (product: AliProduct) => {
+    (product: ImageSearchResponseItem) => {
       const cloneSelectedProducts = clone(selectedProducts);
       const findProductIndex = findIndex(
         (selectedProduct) =>
@@ -85,19 +86,25 @@ export const useProduct = () => {
         });
       }
       const data = await searchAliProduct(imageBlob);
-      updateProducts(data.data.products);
+      updateProducts(data.products);
     } finally {
       initFetchRef.current = false;
     }
   }, [enqueueSnackbar, getImageBlob, updateProducts]);
 
   useEffect(() => {
-    if (products.length <= 0 && !isEmpty(baseUrl)) {
+    if (!isEmpty(baseUrl)) {
       initialProducts().then(() => {});
-    } else {
-      initFetchRef.current = false;
     }
-  }, [initialProducts, baseUrl, products.length]);
+  }, [initialProducts, baseUrl]);
+
+  const selectedProductIds = useMemo(
+    () =>
+      selectedProducts
+        .map((product) => product.product.remote_id)
+        .filter((item) => item !== null) as string[],
+    [selectedProducts],
+  );
 
   return {
     initProducts: initialProducts,
@@ -106,13 +113,11 @@ export const useProduct = () => {
     updateProducts,
     selectProduct: handleSelectProduct,
     selectedProducts,
-    selectedProductIds: selectedProducts.map(
-      (product) => product.product.remote_id,
-    ),
+    selectedProductIds: selectedProductIds,
   };
 };
 
-export const useProductChecked = (product: AliProduct) => {
+export const useProductChecked = (product: ImageSearchResponseItem) => {
   const selectedProducts = useAtomValue(selectedProductsAtom);
   return useMemo(() => {
     const findProductIndex = findIndex(

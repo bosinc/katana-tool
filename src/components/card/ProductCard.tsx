@@ -8,20 +8,21 @@ import {
 } from "@mui/material";
 import {
   ProductCardMedia,
-  ProductCardRateAndOrders,
   ProductCardTitle,
   ProductStoreCTA,
 } from "./CardComponents";
-import { AliProduct } from "../../services/product";
 import { useMemo } from "react";
 import currency from "currency.js";
 import { CARD_WIDTH } from "../../utils/common";
 import { head } from "ramda";
 import { useProduct, useProductChecked } from "../../atoms/product.atom";
+import { ImageSearchResponseItem } from "@katana-common/response/aliexpress.response.ts";
+import { useAuth } from "../../atoms/user.atom.ts";
 
-const ProductCard = ({ product }: { product: AliProduct }) => {
+const ProductCard = ({ product }: { product: ImageSearchResponseItem }) => {
   const isChecked = useProductChecked(product);
   const { selectProduct } = useProduct();
+  const { isLogin } = useAuth();
 
   const { showPrice, showImage } = useMemo(() => {
     let price;
@@ -42,8 +43,14 @@ const ProductCard = ({ product }: { product: AliProduct }) => {
 
   return (
     <Card sx={{ width: CARD_WIDTH, display: "flex", flexDirection: "column" }}>
-      <CardActionArea onClick={() => selectProduct(product)}>
-        <ProductCardMedia src={showImage ?? ""} isChecked={isChecked} />
+      <CardActionArea
+        onClick={isLogin ? () => selectProduct(product) : () => {}}
+      >
+        <ProductCardMedia
+          src={showImage ?? ""}
+          isChecked={isChecked}
+          canSelect={isLogin}
+        />
       </CardActionArea>
       <CardContent
         sx={{
@@ -70,9 +77,8 @@ const ProductCard = ({ product }: { product: AliProduct }) => {
           </Typography>
         </Stack>
 
-        <Stack alignItems={"flex-start"}>
-          <ProductCardRateAndOrders />
-          <ProductStoreCTA />
+        <Stack alignItems={"flex-end"} justifyContent={"flex-end"}>
+          <ProductStoreCTA link={product.shopUrl} />
         </Stack>
       </CardContent>
       <CardActions sx={{ p: 0 }}></CardActions>

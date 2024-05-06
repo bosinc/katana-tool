@@ -2,7 +2,8 @@ import { Button, Stack, Typography } from "@mui/material";
 import { useAuth, useUser } from "../../atoms/user.atom.ts";
 import { logout } from "../../services/login.ts";
 import { useCallback } from "react";
-import SelectStore from "../common/SelectStore.tsx";
+import AddProductToShopCTA from "@components/common/AddProductToShopCTA.tsx";
+import SelectStore from "@components/common/SelectStore.tsx";
 
 const LoginAccount = () => {
   const { user } = useUser();
@@ -44,14 +45,7 @@ const LoginAccount = () => {
         </Stack>
       </Stack>
       <Stack>
-        <Button
-          variant={"contained"}
-          sx={{ textTransform: "unset", width: 180, height: 36 }}
-        >
-          <Typography variant={"body2"} fontWeight={600}>
-            添加到商品库
-          </Typography>
-        </Button>
+        <AddProductToShopCTA />
       </Stack>
     </Stack>
   );

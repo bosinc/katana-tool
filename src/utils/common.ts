@@ -19,6 +19,6 @@ export const DEFAULT_SNACKBAR_ANCHOR_ORIGIN: SnackbarOrigin = {
 };
 
 export const CARD_WIDTH = 232;
-export const CARD_MEDIA_HEIGHT = 275;
+export const CARD_MEDIA_HEIGHT = 232;
 
 export const DEFAULT_SEARCH_PRODUCT_COUNT = 150;
