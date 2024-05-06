@@ -23,6 +23,8 @@ export const CARD_MEDIA_HEIGHT = 232;
 
 export const DEFAULT_SEARCH_PRODUCT_COUNT = 150;
 
-export const DEFAULT_MENU_ITEM_ID = import.meta.env.VITE_PUBLIC_MENU_ITEM_ID;
+export const DEFAULT_MENU_ITEM_ID =
+  import.meta.env.VITE_PUBLIC_MENU_ITEM_ID || "window";
 
-export const PRODUCT_NAME = import.meta.env.VITE_PUBLIC_PRODUCT_NAME;
+export const PROJECT_NAME =
+  import.meta.env.VITE_PUBLIC_PROJECT_NAME || "Pear Tool";

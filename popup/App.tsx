@@ -2,6 +2,7 @@ import { CssBaseline, Stack, Typography } from "@mui/material";
 import { useAuth } from "../src/atoms/user.atom.ts";
 import LoginBaseInfo from "./component/LoginBaseInfo.tsx";
 import LoginForm from "./component/LoginForm.tsx";
+import { PROJECT_NAME } from "../src/utils/common.ts";
 
 const App = () => {
   const { isLogin } = useAuth();
@@ -23,7 +24,7 @@ const App = () => {
             fontWeight={600}
             component="h2"
           >
-            Pear tool
+            {PROJECT_NAME}
           </Typography>
         </Stack>
         <Stack
