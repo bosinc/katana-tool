@@ -1,31 +1,19 @@
 import { useCallback } from "react";
 import { LoginRequest } from "../../services/login.ts";
-import { useSnackbar } from "notistack";
-import {
-  DEFAULT_SNACKBAR_ANCHOR_ORIGIN,
-  DEFAULT_SNACKBAR_DURATION,
-} from "../../utils/common.ts";
 import { loginScheme } from "../../utils/scheme.ts";
 import LoginFormContent from "../common/LoginFormContent.tsx";
+import useBaseSnackbar from "../../hooks/useBaseSnackbar.ts";
 
 const LoginForm = () => {
-  const { enqueueSnackbar } = useSnackbar();
+  const { success, error } = useBaseSnackbar();
 
   const handleFormSubmit = useCallback(() => {
-    enqueueSnackbar("登录成功", {
-      variant: "success",
-      anchorOrigin: DEFAULT_SNACKBAR_ANCHOR_ORIGIN,
-      autoHideDuration: DEFAULT_SNACKBAR_DURATION,
-    });
-  }, [enqueueSnackbar]);
+    success("登录成功");
+  }, [success]);
 
   const handleFailed = useCallback(() => {
-    enqueueSnackbar("账号或密码不正确，请重新登录", {
-      variant: "error",
-      anchorOrigin: DEFAULT_SNACKBAR_ANCHOR_ORIGIN,
-      autoHideDuration: DEFAULT_SNACKBAR_DURATION,
-    });
-  }, [enqueueSnackbar]);
+    error("账号或密码不正确，请重新登录");
+  }, [error]);
 
   return (
     <LoginFormContent<LoginRequest>

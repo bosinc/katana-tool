@@ -37,12 +37,7 @@ const LoginAccount = () => {
         </Button>
       </Stack>
       <Stack direction={"row"} alignItems={"center"}>
-        <Stack direction={"row"} alignItems={"center"} gap={1}>
-          <Typography variant="body2" fontWeight={600}>
-            店铺
-          </Typography>
-          <SelectStore />
-        </Stack>
+        <SelectStore />
       </Stack>
       <Stack>
         <AddProductToShopCTA />

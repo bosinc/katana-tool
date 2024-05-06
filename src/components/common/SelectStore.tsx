@@ -10,8 +10,9 @@ import {
 import { useCallback, useMemo } from "react";
 import { find } from "ramda";
 import { StorePlatform } from "../../types.ts";
+import { STORE_PREFIX } from "../../utils/common.ts";
 
-const SelectStore = () => {
+const SelectStoreInput = () => {
   const { stores, selectStore, toSelectStore, loading } = useStore();
 
   const filterStores = useMemo(
@@ -33,14 +34,23 @@ const SelectStore = () => {
       value={selectStore?.id ?? ""}
       defaultValue={selectStore?.id ?? ""}
       onChange={handleSelected}
-      sx={{ width: 220 }}
+      sx={{ width: 220, border: "none" }}
       placeholder={"请选择店铺"}
       renderValue={(selectValue) => {
         const store = find((store) => store.id === selectValue, stores);
         return (
-          <Typography>
-            {selectValue ? store?.storeName : "请选择店铺"}
-          </Typography>
+          <Stack
+            sx={{
+              width: "100%",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography>
+              {selectValue ? store?.storeName : "请选择店铺"}
+            </Typography>
+          </Stack>
         );
       }}
     >
@@ -63,6 +73,32 @@ const SelectStore = () => {
         ))
       )}
     </Select>
+  );
+};
+
+const SelectStore = () => {
+  const { selectStore } = useStore();
+
+  const storePath = useMemo(
+    () => `${STORE_PREFIX}/${selectStore?.id}/products`,
+    [selectStore],
+  );
+
+  return (
+    <Stack direction={"row"} alignItems={"center"} gap={1}>
+      <Typography variant="body2" fontWeight={600}>
+        店铺
+      </Typography>
+      <SelectStoreInput />
+      <Typography
+        component={"a"}
+        href={storePath}
+        target={"_blank"}
+        variant={"body2"}
+      >
+        前往
+      </Typography>
+    </Stack>
   );
 };
 

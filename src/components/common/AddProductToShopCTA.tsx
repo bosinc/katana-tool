@@ -5,10 +5,13 @@ import useAutoLoading from "../../hooks/useAutoLoading.ts";
 import { saveProductToShop } from "../../services/product.ts";
 import { useStore } from "../../atoms/stores.atom.ts";
 import { isEmpty } from "ramda";
+import useBaseSnackbar from "../../hooks/useBaseSnackbar.ts";
 
 const AddProductToShopCta = () => {
   const { selectedProductIds } = useProduct();
   const { selectStore } = useStore();
+
+  const { success } = useBaseSnackbar();
 
   const handleClick = useCallback(async () => {
     if (!selectStore?.id || isEmpty(selectStore?.id)) return;
@@ -16,7 +19,9 @@ const AddProductToShopCta = () => {
       merchantId: selectStore.id,
       productIds: selectedProductIds,
     });
-  }, [selectedProductIds, selectStore]);
+
+    success(`${selectedProductIds.length}个商品添加成功`);
+  }, [selectedProductIds, selectStore, success]);
 
   const { loading, run: saveProducts } = useAutoLoading<RecordAny>(handleClick);
 

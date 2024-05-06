@@ -10,8 +10,6 @@
     "preview": "vite preview",
     "sync-common": "git submodule update --init",
     "lastest-common": "git submodule foreach git pull origin main",
-    "prepare": "husky install",
-    "verify-commit": "node ./scripts/verify-commit.js",
     "lint-staged": "lint-staged"
   },
   "dependencies": {
@@ -47,7 +45,6 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "husky": "9.0.3",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
   },

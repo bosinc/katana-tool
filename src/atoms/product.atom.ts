@@ -5,12 +5,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { clone, findIndex, insert, isEmpty, remove } from "ramda";
 import { commonSyncStorage } from "../utils/storage.ts";
 import { MessageActionType, StorageKeys } from "../types.ts";
-import { useSnackbar } from "notistack";
-import {
-  DEFAULT_SNACKBAR_ANCHOR_ORIGIN,
-  DEFAULT_SNACKBAR_DURATION,
-} from "../utils/common.ts";
-import { ImageSearchResponseItem } from "@katana-common/response/aliexpress.response.ts";
+import type { ImageSearchResponseItem } from "@katana-common/response/aliexpress.response.ts";
+import useBaseSnackbar from "../hooks/useBaseSnackbar.ts";
 
 export const productListAtom = atom<ImageSearchResponseItem[]>([]);
 
@@ -50,7 +46,7 @@ export const useProduct = () => {
   const [loadingMessage, setLoadingMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { error } = useBaseSnackbar();
 
   const { baseUrl, getImageBlob } = useBaseUrl();
 
@@ -84,11 +80,7 @@ export const useProduct = () => {
       const imageBlob = await getImageBlob();
 
       if (imageBlob.size > 100 * 1000) {
-        enqueueSnackbar("图片尺寸太大, 无法获取数据! 请更新图片", {
-          variant: "error",
-          anchorOrigin: DEFAULT_SNACKBAR_ANCHOR_ORIGIN,
-          autoHideDuration: DEFAULT_SNACKBAR_DURATION,
-        });
+        error("图片尺寸太大, 无法获取数据! 请更新图片");
       }
       setLoadingMessage("相关商品搜索中...");
       const data = await searchAliProduct(imageBlob);
@@ -98,7 +90,7 @@ export const useProduct = () => {
       setLoading(false);
       setLoadingMessage("");
     }
-  }, [enqueueSnackbar, getImageBlob, updateProducts]);
+  }, [error, getImageBlob, updateProducts]);
 
   useEffect(() => {
     if (!isEmpty(baseUrl)) {

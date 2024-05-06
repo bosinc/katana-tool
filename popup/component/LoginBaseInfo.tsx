@@ -2,7 +2,7 @@ import { useAuth, useUser } from "../../src/atoms/user.atom.ts";
 import { Button, Stack, Typography } from "@mui/material";
 import { useCallback } from "react";
 import { logout } from "../../src/services/login.ts";
-import SelectStore from "../../src/components/common/SelectStore.tsx";
+import SelectStore from "@components/common/SelectStore.tsx";
 
 const LoginBaseInfo = () => {
   const { user } = useUser();
@@ -23,12 +23,7 @@ const LoginBaseInfo = () => {
           {`Pear 账号: ${user?.email ?? ""}`}
         </Typography>
 
-        <Stack direction={"row"} alignItems={"center"} gap={1}>
-          <Typography variant="body2" fontWeight={600}>
-            店铺
-          </Typography>
-          <SelectStore />
-        </Stack>
+        <SelectStore />
       </Stack>
       <Button
         variant={"outlined"}
