@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { isEmpty } from "ramda";
 import { Paper, Stack, Typography } from "@mui/material";
-import { useBaseUrl } from "../../atoms/product.atom.ts";
+import { useBaseUrl } from "@atoms/product.atom.ts";
 
 const BaseImage = () => {
   const { baseUrl, getImageBlob } = useBaseUrl();

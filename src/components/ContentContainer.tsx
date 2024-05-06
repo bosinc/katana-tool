@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
 import ProductCard from "./card/ProductCard.tsx";
-import { useProduct } from "../atoms/product.atom.ts";
+import { useProduct } from "@atoms/product.atom.ts";
 import Loading from "@components/common/Loading.tsx";
 
 const ContentContainer = () => {

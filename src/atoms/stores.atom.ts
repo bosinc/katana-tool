@@ -2,8 +2,8 @@ import { atom, useAtom, useAtomValue } from "jotai";
 import { StorageKeys, StoreVO } from "../types.ts";
 import { splitAtom } from "jotai/utils";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getMerchantStoreList } from "../services/login";
-import { commonSyncStorage } from "../utils/storage";
+import { getMerchantStoreList } from "@services/login";
+import { commonSyncStorage } from "@utils/storage";
 
 export const storesAtom = atom<StoreVO[]>([]);
 

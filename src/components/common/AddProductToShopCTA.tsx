@@ -1,26 +1,38 @@
 import { useCallback } from "react";
 import { Button, CircularProgress, Typography } from "@mui/material";
-import { useProduct } from "../../atoms/product.atom.ts";
+import { useSelectProduct } from "@atoms/product.atom.ts";
 import useAutoLoading from "../../hooks/useAutoLoading.ts";
-import { saveProductToShop } from "../../services/product.ts";
-import { useStore } from "../../atoms/stores.atom.ts";
+import { saveProductToShop } from "@services/product.ts";
+import { useStore } from "@atoms/stores.atom.ts";
 import { isEmpty } from "ramda";
 import useBaseSnackbar from "../../hooks/useBaseSnackbar.ts";
 
 const AddProductToShopCta = () => {
-  const { selectedProductIds } = useProduct();
+  const { selectedProductIds } = useSelectProduct();
   const { selectStore } = useStore();
 
-  const { success } = useBaseSnackbar();
+  const { success, error } = useBaseSnackbar();
 
   const handleClick = useCallback(async () => {
     if (!selectStore?.id || isEmpty(selectStore?.id)) return;
-    await saveProductToShop({
-      merchantId: selectStore.id,
-      productIds: selectedProductIds,
-    });
+    try {
+      const data = await saveProductToShop({
+        merchantId: selectStore.id,
+        productIds: selectedProductIds,
+      });
 
-    success(`${selectedProductIds.length}个商品添加成功`);
+      const failCount = data.failed.length;
+      const successCount = selectedProductIds.length - data.failed.length;
+
+      if (successCount > 0) {
+        success(`${successCount}个商品添加成功`);
+      }
+      if (failCount > 0) {
+        error(`${failCount}个商品添加失败`);
+      }
+    } catch {
+      error("添加失败");
+    }
   }, [selectedProductIds, selectStore, success]);
 
   const { loading, run: saveProducts } = useAutoLoading<RecordAny>(handleClick);

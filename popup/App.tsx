@@ -1,8 +1,8 @@
 import { CssBaseline, Stack, Typography } from "@mui/material";
-import { useAuth } from "../src/atoms/user.atom.ts";
+import { useAuth } from "@atoms/user.atom.ts";
 import LoginBaseInfo from "./component/LoginBaseInfo.tsx";
 import LoginForm from "./component/LoginForm.tsx";
-import { PROJECT_NAME } from "../src/utils/common.ts";
+import { PROJECT_NAME } from "@utils/common.ts";
 
 const App = () => {
   const { isLogin } = useAuth();

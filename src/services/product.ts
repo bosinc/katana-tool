@@ -1,6 +1,9 @@
 import katanaAxios from "./request.ts";
-import { DEFAULT_SEARCH_PRODUCT_COUNT } from "../utils/common.ts";
-import { ImageSearchResponseItem } from "@katana-common/response/aliexpress.response.ts";
+import { DEFAULT_SEARCH_PRODUCT_COUNT } from "@utils/common.ts";
+import {
+  ImageSearchResponseItem,
+  ProductSaveResponse,
+} from "@katana-common/response/aliexpress.response.ts";
 
 export const searchAliProduct = async (
   imageBlob: Blob,
@@ -18,6 +21,6 @@ export const searchAliProduct = async (
 export const saveProductToShop = async (data: {
   merchantId: string;
   productIds: string[];
-}) => {
+}): Promise<ProductSaveResponse> => {
   return katanaAxios.post("/aliexpress/product/save", data);
 };

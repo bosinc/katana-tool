@@ -1,4 +1,4 @@
-import { useStore } from "../../atoms/stores.atom.ts";
+import { useStore } from "@atoms/stores.atom.ts";
 import {
   CircularProgress,
   MenuItem,
@@ -10,7 +10,7 @@ import {
 import { useCallback, useMemo } from "react";
 import { find } from "ramda";
 import { StorePlatform } from "../../types.ts";
-import { STORE_PREFIX } from "../../utils/common.ts";
+import { STORE_PREFIX } from "@utils/common.ts";
 
 const SelectStoreInput = () => {
   const { stores, selectStore, toSelectStore, loading } = useStore();

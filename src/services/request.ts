@@ -53,7 +53,7 @@ katanaAxios.interceptors.response.use(
   },
   ({ response, message }) => {
     const { code, message: apiMessage, data } = response.data;
-    return Promise.resolve(
+    return Promise.reject(
       new ApiError(message, apiMessage, {
         status: code,
         data,

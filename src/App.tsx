@@ -1,5 +1,5 @@
-import LoginHeader from "./components/LoginHeader.tsx";
-import ContentContainer from "./components/ContentContainer.tsx";
+import LoginHeader from "@components/LoginHeader.tsx";
+import ContentContainer from "@components/ContentContainer.tsx";
 import { CssBaseline, Stack, ThemeProvider, useTheme } from "@mui/material";
 
 function App() {

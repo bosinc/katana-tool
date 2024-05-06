@@ -1,7 +1,7 @@
-import { useAuth, useUser } from "../../src/atoms/user.atom.ts";
+import { useAuth, useUser } from "@atoms/user.atom.ts";
 import { Button, Stack, Typography } from "@mui/material";
 import { useCallback } from "react";
-import { logout } from "../../src/services/login.ts";
+import { logout } from "@services/login.ts";
 import SelectStore from "@components/common/SelectStore.tsx";
 
 const LoginBaseInfo = () => {

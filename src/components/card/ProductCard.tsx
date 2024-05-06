@@ -13,15 +13,15 @@ import {
 } from "./CardComponents";
 import { useMemo } from "react";
 import currency from "currency.js";
-import { CARD_WIDTH } from "../../utils/common";
+import { CARD_WIDTH } from "@utils/common.ts";
 import { head } from "ramda";
-import { useProduct, useProductChecked } from "../../atoms/product.atom";
+import { useProductChecked, useSelectProduct } from "@atoms/product.atom.ts";
 import { ImageSearchResponseItem } from "@katana-common/response/aliexpress.response.ts";
-import { useAuth } from "../../atoms/user.atom.ts";
+import { useAuth } from "@atoms/user.atom.ts";
 
 const ProductCard = ({ product }: { product: ImageSearchResponseItem }) => {
   const isChecked = useProductChecked(product);
-  const { selectProduct } = useProduct();
+  const { selectProduct } = useSelectProduct();
   const { isLogin } = useAuth();
 
   const { showPrice, showImage } = useMemo(() => {

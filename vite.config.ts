@@ -24,6 +24,9 @@ export default ({ mode }) => {
         "@katana-common": resolve(__dirname, "modules/katana-common"),
         "@components": resolve(__dirname, "src/components"),
         "@utils": resolve(__dirname, "src/utils"),
+        "@services": resolve(__dirname, "src/services"),
+        "@atoms": resolve(__dirname, "src/atoms"),
+        "@hooks": resolve(__dirname, "src/hooks"),
       },
     },
     build: {

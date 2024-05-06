@@ -1,6 +1,6 @@
 import { CardMedia, Checkbox, Stack, Typography } from "@mui/material";
 import { Grade, Store } from "@mui/icons-material";
-import { CARD_MEDIA_HEIGHT } from "../../utils/common.ts";
+import { CARD_MEDIA_HEIGHT } from "@utils/common.ts";
 
 export const ProductCardTitle = ({
   title,

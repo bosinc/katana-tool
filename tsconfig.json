@@ -22,7 +22,11 @@
     "types": ["@types/chrome", "@types/node"],
     "paths": {
       "@katana-common/*": ["./modules/katana-common/*"],
-      "@components/*": ["./src/components/*"]
+      "@components/*": ["./src/components/*"],
+      "@services/*": ["./src/services/*"],
+      "@atoms/*": ["./src/atoms/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
   "exclude": ["node_modules"],

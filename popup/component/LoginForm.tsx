@@ -1,7 +1,7 @@
-import { LoginRequest } from "../../src/services/login.ts";
-import { loginScheme } from "../../src/utils/scheme.ts";
+import { LoginRequest } from "@services/login.ts";
+import { loginScheme } from "@utils/scheme.ts";
 import { useCallback, useEffect, useState } from "react";
-import LoginFormContent from "../../src/components/common/LoginFormContent.tsx";
+import LoginFormContent from "@components/common/LoginFormContent.tsx";
 import { Alert, Collapse, Stack } from "@mui/material";
 import { isEmpty } from "ramda";
 

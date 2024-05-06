@@ -1,7 +1,7 @@
 import { atom, useAtom, useAtomValue } from "jotai";
 import { TokenState } from "../types.ts";
 import { useCallback, useEffect, useRef } from "react";
-import tokenUtil from "../utils/token.ts";
+import tokenUtil from "@utils/token.ts";
 import { isEmpty } from "ramda";
 
 export const userAtom = atom<Partial<TokenState>>({} as Partial<TokenState>);

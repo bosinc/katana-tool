@@ -1,8 +1,8 @@
 import { useCallback } from "react";
-import { LoginRequest } from "../../services/login.ts";
-import { loginScheme } from "../../utils/scheme.ts";
-import LoginFormContent from "../common/LoginFormContent.tsx";
-import useBaseSnackbar from "../../hooks/useBaseSnackbar.ts";
+import { LoginRequest } from "@services/login.ts";
+import { loginScheme } from "@utils/scheme.ts";
+import LoginFormContent from "@components/common/LoginFormContent.tsx";
+import useBaseSnackbar from "@hooks/useBaseSnackbar.ts";
 
 const LoginForm = () => {
   const { success, error } = useBaseSnackbar();

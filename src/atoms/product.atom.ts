@@ -3,10 +3,10 @@ import { atom, useAtom, useAtomValue } from "jotai";
 import { splitAtom } from "jotai/utils";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { clone, findIndex, insert, isEmpty, remove } from "ramda";
-import { commonSyncStorage } from "../utils/storage.ts";
+import { commonSyncStorage } from "@utils/storage.ts";
 import { MessageActionType, StorageKeys } from "../types.ts";
 import type { ImageSearchResponseItem } from "@katana-common/response/aliexpress.response.ts";
-import useBaseSnackbar from "../hooks/useBaseSnackbar.ts";
+import useBaseSnackbar from "@hooks/useBaseSnackbar.ts";
 
 export const productListAtom = atom<ImageSearchResponseItem[]>([]);
 
@@ -40,8 +40,6 @@ export const useBaseUrl = () => {
 export const useProduct = () => {
   const [products, updateProducts] = useAtom(productListAtom);
   const splitProductList = useAtomValue(splitProductListAtom);
-  const [selectedProducts, updateSelectedProducts] =
-    useAtom(selectedProductsAtom);
 
   const [loadingMessage, setLoadingMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -51,25 +49,6 @@ export const useProduct = () => {
   const { baseUrl, getImageBlob } = useBaseUrl();
 
   const initFetchRef = useRef(false);
-
-  const handleSelectProduct = useCallback(
-    (product: ImageSearchResponseItem) => {
-      const cloneSelectedProducts = clone(selectedProducts);
-      const findProductIndex = findIndex(
-        (selectedProduct) =>
-          selectedProduct.product.remote_id === product.product.remote_id,
-        cloneSelectedProducts,
-      );
-      if (findProductIndex >= 0) {
-        const updateList = remove(findProductIndex, 1, cloneSelectedProducts);
-        updateSelectedProducts(updateList);
-      } else {
-        const updateList = insert(-1, product, cloneSelectedProducts);
-        updateSelectedProducts(updateList);
-      }
-    },
-    [selectedProducts, updateSelectedProducts],
-  );
 
   const initialProducts = useCallback(async () => {
     try {
@@ -98,6 +77,20 @@ export const useProduct = () => {
     }
   }, [initialProducts, baseUrl]);
 
+  return {
+    initProducts: initialProducts,
+    products,
+    productAtoms: splitProductList,
+    updateProducts,
+    loading,
+    loadingMessage,
+  };
+};
+
+export const useSelectProduct = () => {
+  const [selectedProducts, updateSelectedProducts] =
+    useAtom(selectedProductsAtom);
+
   const selectedProductIds = useMemo(
     () =>
       selectedProducts
@@ -106,16 +99,29 @@ export const useProduct = () => {
     [selectedProducts],
   );
 
+  const handleSelectProduct = useCallback(
+    (product: ImageSearchResponseItem) => {
+      const cloneSelectedProducts = clone(selectedProducts);
+      const findProductIndex = findIndex(
+        (selectedProduct) =>
+          selectedProduct.product.remote_id === product.product.remote_id,
+        cloneSelectedProducts,
+      );
+      if (findProductIndex >= 0) {
+        const updateList = remove(findProductIndex, 1, cloneSelectedProducts);
+        updateSelectedProducts(updateList);
+      } else {
+        const updateList = insert(-1, product, cloneSelectedProducts);
+        updateSelectedProducts(updateList);
+      }
+    },
+    [selectedProducts, updateSelectedProducts],
+  );
+
   return {
-    initProducts: initialProducts,
-    products,
-    productAtoms: splitProductList,
-    updateProducts,
-    selectProduct: handleSelectProduct,
     selectedProducts,
-    selectedProductIds: selectedProductIds,
-    loading,
-    loadingMessage,
+    selectedProductIds,
+    selectProduct: handleSelectProduct,
   };
 };
 
