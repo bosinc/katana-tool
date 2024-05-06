@@ -1,4 +1,59 @@
-# React + TypeScript + Vite
+# Katana Tools
+
+## Product Env
+ 
+- **VITE_PUBLIC_SERVER_URL** -- backend server url
+- **VITE_PUBLIC_DOMAIN** -- cookie domain
+- **VITE_PUBLIC_PROJECT_NAME** -- token cookie's prefix
+- **VITE_PUBLIC_MENU_ITEM_ID** -- menu item id ( `window` | `iframe` )
+
+---
+
+## Commands
+
+### Installing the project
+
+Run the following command:
+
+```shell
+pnpm i
+```
+
+### Syncing resources shared by back-end
+
+Run the following command:
+
+```shell
+pnpm run sync-common
+```
+
+### Running the project
+
+Run the following command:
+
+```shell
+pnpm run dev
+```
+
+### Building the project
+
+Run the following command:
+
+```shell
+pnpm run build
+```
+
+### Linting the project
+
+Run the following command:
+
+```shell
+pnpm run lint
+```
+
+---
+
+## React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

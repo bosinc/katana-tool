@@ -22,3 +22,5 @@ export const CARD_WIDTH = 232;
 export const CARD_MEDIA_HEIGHT = 232;
 
 export const DEFAULT_SEARCH_PRODUCT_COUNT = 150;
+
+export const DEFAULT_MENU_ITEM_ID = import.meta.env.VITE_PUBLIC_MENU_ITEM_ID;

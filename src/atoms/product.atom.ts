@@ -47,6 +47,9 @@ export const useProduct = () => {
   const [selectedProducts, updateSelectedProducts] =
     useAtom(selectedProductsAtom);
 
+  const [loadingMessage, setLoadingMessage] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
   const { enqueueSnackbar } = useSnackbar();
 
   const { baseUrl, getImageBlob } = useBaseUrl();
@@ -76,6 +79,8 @@ export const useProduct = () => {
     try {
       if (initFetchRef.current) return;
       initFetchRef.current = true;
+      setLoading(true);
+      setLoadingMessage("图片处理中...");
       const imageBlob = await getImageBlob();
 
       if (imageBlob.size > 100 * 1000) {
@@ -85,10 +90,13 @@ export const useProduct = () => {
           autoHideDuration: DEFAULT_SNACKBAR_DURATION,
         });
       }
+      setLoadingMessage("相关商品搜索中...");
       const data = await searchAliProduct(imageBlob);
       updateProducts(data.products);
     } finally {
       initFetchRef.current = false;
+      setLoading(false);
+      setLoadingMessage("");
     }
   }, [enqueueSnackbar, getImageBlob, updateProducts]);
 
@@ -114,6 +122,8 @@ export const useProduct = () => {
     selectProduct: handleSelectProduct,
     selectedProducts,
     selectedProductIds: selectedProductIds,
+    loading,
+    loadingMessage,
   };
 };
 

@@ -1,5 +1,6 @@
 import { commonSyncStorage } from "./utils/storage";
 import { MessageActionType, StorageKeys } from "./types";
+import { DEFAULT_MENU_ITEM_ID } from "./utils/common.ts";
 
 console.log("service worker init!!!");
 
@@ -18,13 +19,13 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   dataProxy.baseUrl = info.srcUrl;
   await commonSyncStorage.set(StorageKeys.BASE_URL, info.srcUrl);
   switch (info.menuItemId) {
-    case "insertIframe": {
+    case "iframe": {
       if (tab?.id) {
         await chrome.tabs.sendMessage(tab.id, { action: "insertIframe" });
       }
       break;
     }
-    case "image": {
+    case "window": {
       if (!dataProxy.windows) {
         dataProxy.windows = await chrome.windows.create({
           url: "index.html",
@@ -50,7 +51,7 @@ chrome.runtime.onInstalled.addListener(async () => {
   chrome.contextMenus.create({
     title: "在AliExpress中搜索商品",
     contexts: ["image"],
-    id: "image",
+    id: DEFAULT_MENU_ITEM_ID,
   });
 });
 

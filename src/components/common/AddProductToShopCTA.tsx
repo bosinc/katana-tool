@@ -22,7 +22,7 @@ const AddProductToShopCta = () => {
 
   return (
     <Button
-      disabled={loading}
+      disabled={loading || selectedProductIds.length === 0}
       variant={"contained"}
       sx={{ textTransform: "unset", width: 180, height: 36 }}
       onClick={saveProducts}

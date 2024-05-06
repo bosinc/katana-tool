@@ -1,21 +1,25 @@
 import LoginHeader from "./components/LoginHeader.tsx";
 import ContentContainer from "./components/ContentContainer.tsx";
-import { CssBaseline, Stack } from "@mui/material";
+import { CssBaseline, Stack, ThemeProvider, useTheme } from "@mui/material";
 
 function App() {
+  const theme = useTheme();
+
   return (
-    <Stack
-      sx={{
-        position: "relative",
-        overflow: "auto",
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <CssBaseline />
-      <LoginHeader />
-      <ContentContainer />
-    </Stack>
+    <ThemeProvider theme={theme}>
+      <Stack
+        sx={{
+          position: "relative",
+          overflow: "auto",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <CssBaseline />
+        <LoginHeader />
+        <ContentContainer />
+      </Stack>
+    </ThemeProvider>
   );
 }
 
