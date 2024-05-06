@@ -9,7 +9,10 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "sync-common": "git submodule update --init",
-    "lastest-common": "git submodule foreach git pull origin main"
+    "lastest-common": "git submodule foreach git pull origin main",
+    "prepare": "husky install",
+    "verify-commit": "node ./scripts/verify-commit.js",
+    "lint-staged": "lint-staged"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -17,7 +20,6 @@
     "@hookform/resolvers": "^3.3.4",
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
-    "@types/node": "^20.12.7",
     "axios": "^1.6.8",
     "blueimp-md5": "^2.19.0",
     "currency.js": "^2.0.4",
@@ -35,6 +37,7 @@
     "@crxjs/vite-plugin": "2.0.0-beta.23",
     "@types/blueimp-md5": "^2.18.2",
     "@types/chrome": "^0.0.266",
+    "@types/node": "^20.12.8",
     "@types/ramda": "^0.29.12",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
@@ -44,7 +47,17 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "husky": "9.0.3",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
+  },
+  "packageManager": "pnpm@8.6.10",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": "eslint --fix --",
+    "popup/**/*.{js,jsx,ts,tsx}": "eslint --fix --",
+    "**/*.{js,jsx,ts,tsx,md,json}": "prettier --write"
   }
 }
