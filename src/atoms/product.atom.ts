@@ -1,5 +1,5 @@
 import { searchAliProduct } from "../services/product.ts";
-import { atom, useAtom, useAtomValue } from "jotai";
+import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { splitAtom } from "jotai/utils";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { clone, findIndex, insert, isEmpty, remove } from "ramda";
@@ -40,6 +40,7 @@ export const useBaseUrl = () => {
 export const useProduct = () => {
   const [products, updateProducts] = useAtom(productListAtom);
   const splitProductList = useAtomValue(splitProductListAtom);
+  const updateSelectedProducts = useSetAtom(selectedProductsAtom);
 
   const [loadingMessage, setLoadingMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -54,6 +55,7 @@ export const useProduct = () => {
     try {
       if (initFetchRef.current) return;
       initFetchRef.current = true;
+      updateSelectedProducts([]);
       setLoading(true);
       setLoadingMessage("图片处理中...");
       const imageBlob = await getImageBlob();
