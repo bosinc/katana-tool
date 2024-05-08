@@ -1,6 +1,6 @@
 import { commonSyncStorage } from "./utils/storage";
-import { MessageActionType, StorageKeys } from "./types";
 import { DEFAULT_MENU_ITEM_ID } from "./utils/common.ts";
+import { MessageActionType, StorageKeys } from "./enum.ts";
 
 console.log("service worker init!!!");
 

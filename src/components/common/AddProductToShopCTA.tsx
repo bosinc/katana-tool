@@ -1,11 +1,11 @@
 import { useCallback } from "react";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import { useSelectProduct } from "@atoms/product.atom.ts";
-import useAutoLoading from "../../hooks/useAutoLoading.ts";
+import useAutoLoading from "@hooks/useAutoLoading.ts";
 import { saveProductToShop } from "@services/product.ts";
 import { useStore } from "@atoms/stores.atom.ts";
 import { isEmpty } from "ramda";
-import useBaseSnackbar from "../../hooks/useBaseSnackbar.ts";
+import useBaseSnackbar from "@hooks/useBaseSnackbar.ts";
 
 const AddProductToShopCta = () => {
   const { selectedProductIds } = useSelectProduct();

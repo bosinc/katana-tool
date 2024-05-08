@@ -4,9 +4,9 @@ import { splitAtom } from "jotai/utils";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { clone, findIndex, insert, isEmpty, remove } from "ramda";
 import { commonSyncStorage } from "@utils/storage.ts";
-import { MessageActionType, StorageKeys } from "../types.ts";
-import type { ImageSearchResponseItem } from "@katana-common/response/aliexpress.response.ts";
+import { MessageActionType, StorageKeys } from "../enum.ts";
 import useBaseSnackbar from "@hooks/useBaseSnackbar.ts";
+import type { ImageSearchResponseItem } from "response/aliexpress.response";
 
 export const productListAtom = atom<ImageSearchResponseItem[]>([]);
 
@@ -71,7 +71,7 @@ export const useProduct = () => {
       setLoading(false);
       setLoadingMessage("");
     }
-  }, [error, getImageBlob, updateProducts]);
+  }, [error, getImageBlob, updateProducts, updateSelectedProducts]);
 
   useEffect(() => {
     if (!isEmpty(baseUrl)) {

@@ -7,7 +7,7 @@ import { useCallback, useMemo } from "react";
 import {
   DEFAULT_SNACKBAR_ANCHOR_ORIGIN,
   DEFAULT_SNACKBAR_DURATION,
-} from "../utils/common.ts";
+} from "@utils/common.ts";
 
 const useBaseSnackbar = (
   config?: Omit<OptionsWithExtraProps<VariantType>, "variant">,

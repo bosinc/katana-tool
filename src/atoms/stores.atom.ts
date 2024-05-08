@@ -1,9 +1,10 @@
 import { atom, useAtom, useAtomValue } from "jotai";
-import { StorageKeys, StoreVO } from "../types.ts";
+import type { StoreVO } from "../types";
 import { splitAtom } from "jotai/utils";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getMerchantStoreList } from "@services/login";
 import { commonSyncStorage } from "@utils/storage";
+import { StorageKeys } from "../enum.ts";
 
 export const storesAtom = atom<StoreVO[]>([]);
 

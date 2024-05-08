@@ -16,8 +16,8 @@ import currency from "currency.js";
 import { CARD_WIDTH } from "@utils/common.ts";
 import { head } from "ramda";
 import { useProductChecked, useSelectProduct } from "@atoms/product.atom.ts";
-import { ImageSearchResponseItem } from "@katana-common/response/aliexpress.response.ts";
 import { useAuth } from "@atoms/user.atom.ts";
+import type { ImageSearchResponseItem } from "response/aliexpress.response";
 
 const ProductCard = ({ product }: { product: ImageSearchResponseItem }) => {
   const isChecked = useProductChecked(product);

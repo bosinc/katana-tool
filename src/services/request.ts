@@ -3,8 +3,8 @@ import axios, {
   AxiosRequestConfig,
   InternalAxiosRequestConfig,
 } from "axios";
-import tokenUtil from "../utils/token.ts";
-import { BASE_SERVER_URL } from "../utils/common.ts";
+import tokenUtil from "@utils/token.ts";
+import { BASE_SERVER_URL } from "@utils/common.ts";
 
 export class ApiError extends Error {
   constructor(message: string, apiMessage: string, response: API.Response) {

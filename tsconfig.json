@@ -19,6 +19,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "strictPropertyInitialization": false,
     "types": ["@types/chrome", "@types/node"],
     "paths": {
       "@katana-common/*": ["./modules/katana-common/*"],
@@ -29,7 +30,7 @@
       "@utils/*": ["./src/utils/*"]
     }
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "modules/katana-common"],
   "include": [
     "src",
     "popup",

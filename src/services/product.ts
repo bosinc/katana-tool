@@ -3,7 +3,7 @@ import { DEFAULT_SEARCH_PRODUCT_COUNT } from "@utils/common.ts";
 import {
   ImageSearchResponseItem,
   ProductSaveResponse,
-} from "@katana-common/response/aliexpress.response.ts";
+} from "response/aliexpress.response";
 
 export const searchAliProduct = async (
   imageBlob: Blob,

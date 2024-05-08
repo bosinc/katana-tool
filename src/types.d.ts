@@ -1,14 +1,5 @@
-import { MerchantType, UserRole } from "dto/enum";
-
-export enum MessageActionType {
-  IMAGE_ACTION = "image_action",
-  USER_ACTION = "user_action",
-}
-
-export enum StorePlatform {
-  SHOPIFY = "SHOPIFY",
-  PEAR = "PEAR",
-}
+import type { UserRole } from "@katana-common/types/user";
+import { MerchantType } from "./enum.ts";
 
 export type TokenState = {
   iat: number;
@@ -80,9 +71,4 @@ export interface UserVO {
   lastName: null | string;
   email: string;
   defaultMerchantId: null | string;
-}
-
-export enum StorageKeys {
-  BASE_URL = "katana_tool_search_base_url",
-  SELECT_STORE_ID = "katana_tool_select_store_id",
 }

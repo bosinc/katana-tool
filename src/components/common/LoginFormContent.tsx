@@ -1,12 +1,12 @@
 import { useCallback, useRef } from "react";
 import FormItem from "../login/FormItem.tsx";
 import { Button, Stack, Typography } from "@mui/material";
-import useAutoLoading from "../../hooks/useAutoLoading.ts";
+import useAutoLoading from "@hooks/useAutoLoading.ts";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { login, LoginRequest } from "@services/login.ts";
-import tokenUtil from "../../utils/token.ts";
+import tokenUtil from "@utils/token.ts";
 import { useAuth } from "@atoms/user.atom.ts";
 
 interface LoginFormContentProps<T extends RecordAny> {
