@@ -17,6 +17,7 @@
     "@hookform/resolvers": "^3.3.4",
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
+    "ahooks": "^3.7.11",
     "axios": "^1.6.8",
     "blueimp-md5": "^2.19.0",
     "currency.js": "^2.0.4",

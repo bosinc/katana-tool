@@ -1,12 +1,13 @@
 import { searchAliProduct } from "../services/product.ts";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { splitAtom } from "jotai/utils";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { clone, findIndex, insert, isEmpty, remove } from "ramda";
 import { commonSyncStorage } from "@utils/storage.ts";
 import { MessageActionType, StorageKeys } from "../enum.ts";
 import useBaseSnackbar from "@hooks/useBaseSnackbar.ts";
 import type { ImageSearchResponseItem } from "response/aliexpress.response";
+import { useRequest } from "ahooks";
 
 export const productListAtom = atom<ImageSearchResponseItem[]>([]);
 
@@ -42,42 +43,45 @@ export const useProduct = () => {
   const splitProductList = useAtomValue(splitProductListAtom);
   const updateSelectedProducts = useSetAtom(selectedProductsAtom);
 
+  const { baseUrl, getImageBlob } = useBaseUrl();
+
   const [loadingMessage, setLoadingMessage] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
 
   const { error } = useBaseSnackbar();
 
-  const { baseUrl, getImageBlob } = useBaseUrl();
-
-  const initFetchRef = useRef(false);
-
   const initialProducts = useCallback(async () => {
     try {
-      if (initFetchRef.current) return;
-      initFetchRef.current = true;
       updateSelectedProducts([]);
-      setLoading(true);
       setLoadingMessage("图片处理中...");
       const imageBlob = await getImageBlob();
 
       if (imageBlob.size > 100 * 1000) {
-        error("图片尺寸太大, 无法获取数据! 请更新图片");
+        error("图片大于100KB, 无法获取数据! 请重新选择图片");
+        return false;
       }
       setLoadingMessage("相关商品搜索中...");
-      const data = await searchAliProduct(imageBlob);
-      updateProducts(data.products);
+      return await searchAliProduct(imageBlob);
     } finally {
-      initFetchRef.current = false;
-      setLoading(false);
       setLoadingMessage("");
     }
   }, [error, getImageBlob, updateProducts, updateSelectedProducts]);
 
+  const { loading, run, data, cancel } = useRequest(initialProducts, {
+    manual: true,
+  });
+
   useEffect(() => {
     if (!isEmpty(baseUrl)) {
-      initialProducts().then(() => {});
+      cancel();
+      run();
     }
   }, [initialProducts, baseUrl]);
+
+  useEffect(() => {
+    if (data) {
+      updateProducts(data.products);
+    }
+  }, [data]);
 
   return {
     initProducts: initialProducts,
