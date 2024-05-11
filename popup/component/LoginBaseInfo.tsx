@@ -1,17 +1,10 @@
 import { useAuth, useUser } from "@atoms/user.atom.ts";
 import { Button, Stack, Typography } from "@mui/material";
-import { useCallback } from "react";
-import { logout } from "@services/login.ts";
 import SelectStore from "@components/common/SelectStore.tsx";
 
 const LoginBaseInfo = () => {
   const { user } = useUser();
-  const { checkLogin } = useAuth();
-
-  const handleLogout = useCallback(async () => {
-    await logout();
-    await checkLogin();
-  }, [checkLogin]);
+  const { logout } = useAuth();
 
   return (
     <Stack
@@ -29,7 +22,7 @@ const LoginBaseInfo = () => {
         variant={"outlined"}
         color={"error"}
         sx={{ textTransform: "unset", height: 36 }}
-        onClick={handleLogout}
+        onClick={logout}
       >
         <Typography variant={"body2"} fontWeight={600}>
           退出

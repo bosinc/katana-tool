@@ -30,7 +30,8 @@ export const useAuth = () => {
     updateToken(undefined);
     await tokenUtil.removeToken();
     await commonSyncStorage.set(StorageKeys.SELECT_STORE_ID, "");
-  }, [updateToken, updateUser]);
+    await checkLogin();
+  }, [updateToken, updateUser, checkLogin]);
 
   return { checkLogin, token, isLogin: !!token, logout };
 };

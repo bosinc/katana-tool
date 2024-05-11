@@ -1,18 +1,12 @@
 import { Button, Stack, Typography } from "@mui/material";
 
-import { useCallback } from "react";
 import AddProductToShopCTA from "@components/common/AddProductToShopCTA.tsx";
 import SelectStore from "@components/common/SelectStore.tsx";
 import { useAuth, useUser } from "@atoms/user.atom.ts";
 
 const LoginAccount = () => {
   const { user } = useUser();
-  const { checkLogin, logout } = useAuth();
-
-  const handleLogout = useCallback(async () => {
-    await logout();
-    await checkLogin();
-  }, [checkLogin]);
+  const { logout } = useAuth();
 
   return (
     <Stack
@@ -29,7 +23,7 @@ const LoginAccount = () => {
         <Button
           variant={"contained"}
           sx={{ textTransform: "unset", width: 80, height: 36 }}
-          onClick={handleLogout}
+          onClick={logout}
         >
           <Typography variant={"body2"} fontWeight={600}>
             退出

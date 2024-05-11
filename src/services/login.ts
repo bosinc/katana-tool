@@ -1,9 +1,6 @@
 import md5 from "blueimp-md5";
 import katanaAxios from "./request.ts";
 import type { StoreVO, UserVO } from "../types.d.ts";
-import tokenUtil from "../utils/token.ts";
-import { commonSyncStorage } from "../utils/storage.ts";
-import { StorageKeys } from "../enum.ts";
 
 export interface LoginRequest {
   email: string;
@@ -25,11 +22,6 @@ export const login = async (data: LoginRequest) => {
       password: pwdMd5(data.password),
     },
   );
-};
-
-export const logout = async () => {
-  await tokenUtil.removeToken();
-  await commonSyncStorage.set(StorageKeys.SELECT_STORE_ID, "");
 };
 
 export const getSelf = async (): Promise<{ user: UserVO }> => {
