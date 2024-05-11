@@ -11,6 +11,7 @@ import { useCallback, useMemo } from "react";
 import { find } from "ramda";
 import { STORE_PREFIX } from "@utils/common.ts";
 import { StorePlatform } from "../../enum.ts";
+import BlankContainer from "@components/common/BlankContainer.tsx";
 
 const SelectStoreInput = () => {
   const { stores, selectStore, toSelectStore, loading } = useStore();
@@ -64,13 +65,15 @@ const SelectStoreInput = () => {
           <CircularProgress size={16} />
         </Stack>
       ) : (
-        filterStores.map((item) => (
-          <MenuItem key={item.id} value={item.id} sx={{ minHeight: 36 }}>
-            <Typography variant={"body2"} fontWeight={600}>
-              {item.storeName}
-            </Typography>
-          </MenuItem>
-        ))
+        <BlankContainer data={filterStores} tip={"暂无店铺信息"}>
+          {filterStores.map((item) => (
+            <MenuItem key={item.id} value={item.id} sx={{ minHeight: 36 }}>
+              <Typography variant={"body2"} fontWeight={600}>
+                {item.storeName}
+              </Typography>
+            </MenuItem>
+          ))}
+        </BlankContainer>
       )}
     </Select>
   );
@@ -80,7 +83,8 @@ const SelectStore = () => {
   const { selectStore } = useStore();
 
   const storePath = useMemo(
-    () => `${STORE_PREFIX}/${selectStore?.id}/products`,
+    () =>
+      selectStore?.id ? `${STORE_PREFIX}/${selectStore?.id}/products` : "",
     [selectStore],
   );
 
@@ -90,14 +94,16 @@ const SelectStore = () => {
         店铺
       </Typography>
       <SelectStoreInput />
-      <Typography
-        component={"a"}
-        href={storePath}
-        target={"_blank"}
-        variant={"body2"}
-      >
-        前往
-      </Typography>
+      {selectStore?.id ? (
+        <Typography
+          component={"a"}
+          href={storePath}
+          target={"_blank"}
+          variant={"body2"}
+        >
+          前往
+        </Typography>
+      ) : null}
     </Stack>
   );
 };

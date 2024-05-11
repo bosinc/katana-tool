@@ -1,9 +1,10 @@
+const iframe = document.createElement("iframe");
+
 chrome.runtime.onMessage.addListener((message) => {
   if (message.action === "insertIframe") {
-    const iframe = document.createElement("iframe");
     iframe.src = chrome.runtime.getURL("index.html");
-    iframe.style.width = "1280px";
-    iframe.style.height = "960px";
+    iframe.style.width = "100%";
+    iframe.style.height = "100%";
     iframe.style.position = "fixed";
     iframe.style.top = "50%";
     iframe.style.left = "50%";
@@ -11,9 +12,18 @@ chrome.runtime.onMessage.addListener((message) => {
     iframe.style.zIndex = "999999";
     iframe.style.outline = "none";
     iframe.style.border = "none";
-    iframe.style.boxShadow = "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px";
-    iframe.style.borderRadius = "16px";
+
+    iframe.id = "pear-search-iframe";
 
     document.body.appendChild(iframe);
+  }
+
+  if (message.action === "hideWindowScrollbar") {
+    document.body.style.overflow = "hidden";
+  }
+
+  if (message.action === "removeIframe") {
+    document.body.style.overflow = "unset";
+    document.body.removeChild(iframe);
   }
 });

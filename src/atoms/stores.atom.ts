@@ -1,10 +1,11 @@
 import { atom, useAtom, useAtomValue } from "jotai";
 import type { StoreVO } from "../types";
 import { splitAtom } from "jotai/utils";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { getMerchantStoreList } from "@services/login";
 import { commonSyncStorage } from "@utils/storage";
 import { StorageKeys } from "../enum.ts";
+import { useRequest } from "ahooks";
 
 export const storesAtom = atom<StoreVO[]>([]);
 
@@ -18,23 +19,24 @@ export const useStore = () => {
   const splitStores = useAtomValue(splitStoresAtom);
   const [selectStore, updateSelectStore] = useAtom(selectStoreAtom);
 
-  const initStatusRef = useRef(false);
-  const [loading, setLoading] = useState(false);
+  const { data, loading } = useRequest(getMerchantStoreList, { manual: false });
 
-  const initStores = useCallback(async () => {
-    if (initStatusRef.current) return;
-    setLoading(true);
-    initStatusRef.current = true;
-    const { items } = await getMerchantStoreList();
-    updateStores(items);
-    if (!selectStore) {
-      const selectId = await commonSyncStorage.get(StorageKeys.SELECT_STORE_ID);
-      const storageStore = selectId
-        ? items.find((item) => item.id === selectId)
-        : null;
-      updateSelectStore(storageStore ?? items[0] ?? null);
+  const initSelectedStore = useCallback(async () => {
+    const selectId = await commonSyncStorage.get(StorageKeys.SELECT_STORE_ID);
+    const storageStore = selectId
+      ? stores.find((item) => item.id === selectId)
+      : null;
+    updateSelectStore(storageStore ?? stores[0] ?? null);
+  }, [stores, updateSelectStore]);
+
+  useEffect(() => {
+    if (data) {
+      updateStores(data.items);
+      if (!selectStore) {
+        initSelectedStore().then(() => {});
+      }
     }
-  }, [updateStores, updateSelectStore, setLoading, selectStore]);
+  }, [data, initSelectedStore, selectStore, updateStores]);
 
   const handleSelectStore = useCallback(
     async (storeId: string) => {
@@ -43,15 +45,6 @@ export const useStore = () => {
     },
     [stores, updateSelectStore],
   );
-
-  useEffect(() => {
-    if (stores.length <= 0) {
-      initStores().then(() => {});
-    } else {
-      setLoading(false);
-      initStatusRef.current = false;
-    }
-  }, [stores, initStores, setLoading]);
 
   return {
     stores,
