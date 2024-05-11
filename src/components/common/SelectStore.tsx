@@ -21,8 +21,11 @@ const SelectStoreInput = () => {
     [stores],
   );
 
+  console.log({ selectStore });
+
   const handleSelected = useCallback(
     async (e: SelectChangeEvent<string>) => {
+      console.log({ e });
       await toSelectStore(e.target.value);
     },
     [toSelectStore],
@@ -33,7 +36,6 @@ const SelectStoreInput = () => {
       size={"small"}
       displayEmpty
       value={selectStore?.id ?? ""}
-      defaultValue={selectStore?.id ?? ""}
       onChange={handleSelected}
       sx={{ width: 220, border: "none" }}
       placeholder={"请选择店铺"}
@@ -48,7 +50,15 @@ const SelectStoreInput = () => {
               justifyContent: "space-between",
             }}
           >
-            <Typography>
+            <Typography
+              component={"div"}
+              sx={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                display: "inline-block",
+                whiteSpace: "nowrap",
+              }}
+            >
               {selectValue ? store?.storeName : "请选择店铺"}
             </Typography>
           </Stack>
@@ -60,20 +70,19 @@ const SelectStoreInput = () => {
           请选择店铺
         </Typography>
       </MenuItem>
+      {filterStores.map((item) => (
+        <MenuItem key={item.id} value={item.id} sx={{ minHeight: 36 }}>
+          <Typography variant={"body2"} fontWeight={600}>
+            {item.storeName}
+          </Typography>
+        </MenuItem>
+      ))}
       {loading ? (
         <Stack sx={{ p: 2, justifyContent: "center", alignItems: "center" }}>
           <CircularProgress size={16} />
         </Stack>
       ) : (
-        <BlankContainer data={filterStores} tip={"暂无店铺信息"}>
-          {filterStores.map((item) => (
-            <MenuItem key={item.id} value={item.id} sx={{ minHeight: 36 }}>
-              <Typography variant={"body2"} fontWeight={600}>
-                {item.storeName}
-              </Typography>
-            </MenuItem>
-          ))}
-        </BlankContainer>
+        <BlankContainer tip={"暂无商户信息"} data={filterStores} />
       )}
     </Select>
   );

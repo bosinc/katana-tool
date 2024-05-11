@@ -1,6 +1,5 @@
 import { Button, Stack, Typography } from "@mui/material";
 
-import { logout } from "@services/login.ts";
 import { useCallback } from "react";
 import AddProductToShopCTA from "@components/common/AddProductToShopCTA.tsx";
 import SelectStore from "@components/common/SelectStore.tsx";
@@ -8,7 +7,7 @@ import { useAuth, useUser } from "@atoms/user.atom.ts";
 
 const LoginAccount = () => {
   const { user } = useUser();
-  const { checkLogin } = useAuth();
+  const { checkLogin, logout } = useAuth();
 
   const handleLogout = useCallback(async () => {
     await logout();

@@ -22,10 +22,15 @@ const AddProductToShopCta = () => {
       });
 
       const failCount = data.failed.length;
-      const successCount = selectedProductIds.length - data.failed.length;
+      const duplicateCount = data.duplicate.length;
+      const successCount =
+        selectedProductIds.length - data.failed.length - duplicateCount;
 
       if (successCount > 0) {
         success(`${successCount}个商品添加成功`);
+      }
+      if (duplicateCount > 0) {
+        success(`${duplicateCount}个商品已存在`);
       }
       if (failCount > 0) {
         error(`${failCount}个商品添加失败`);

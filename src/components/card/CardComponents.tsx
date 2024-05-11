@@ -122,6 +122,7 @@ export const ProductCardMedia = ({
             right: 0,
             top: 0,
             borderBottomLeftRadius: 12,
+            boxShadow: "rgba(255, 255, 255, 0.1) -2px 2px 2px -1px",
           }}
         >
           <Checkbox

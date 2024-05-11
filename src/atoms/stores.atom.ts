@@ -32,14 +32,13 @@ export const useStore = () => {
   useEffect(() => {
     if (data) {
       updateStores(data.items);
-      if (!selectStore) {
-        initSelectedStore().then(() => {});
-      }
+      initSelectedStore().then(() => {});
     }
   }, [data, initSelectedStore, selectStore, updateStores]);
 
   const handleSelectStore = useCallback(
     async (storeId: string) => {
+      console.log({ storeId });
       await commonSyncStorage.set(StorageKeys.SELECT_STORE_ID, storeId);
       updateSelectStore(stores.find((store) => storeId === store.id) ?? null);
     },

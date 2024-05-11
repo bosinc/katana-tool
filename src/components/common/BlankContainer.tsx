@@ -26,9 +26,8 @@ const BlankContainer = <T extends RecordAny>({
             {tip}
           </Typography>
         </Stack>
-      ) : (
-        children
-      )}
+      ) : null}
+      {children}
     </>
   );
 };

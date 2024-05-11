@@ -1,6 +1,7 @@
 export const commonSyncStorage = {
   async get(key: string): Promise<string | undefined> {
     const values = await chrome.storage.sync.get();
+    console.log({ values }, "storage");
     return values[key];
   },
   async set(key: string, value: string | undefined): Promise<void> {
