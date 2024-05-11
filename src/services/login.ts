@@ -37,6 +37,5 @@ export const getSelf = async (): Promise<{ user: UserVO }> => {
 };
 
 export const getMerchantStoreList = (): Promise<{ items: StoreVO[] }> => {
-  console.log("update stores");
   return katanaAxios.get("/merchant/list");
 };

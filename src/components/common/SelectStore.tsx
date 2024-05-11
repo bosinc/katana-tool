@@ -1,4 +1,4 @@
-import { useStore } from "@atoms/stores.atom.ts";
+import { useSelectedStore, useStore } from "@atoms/stores.atom.ts";
 import {
   CircularProgress,
   MenuItem,
@@ -14,18 +14,16 @@ import { StorePlatform } from "../../enum.ts";
 import BlankContainer from "@components/common/BlankContainer.tsx";
 
 const SelectStoreInput = () => {
-  const { stores, selectStore, toSelectStore, loading } = useStore();
+  const { stores, loading } = useStore();
+  const { selectStore, toSelectStore } = useSelectedStore();
 
   const filterStores = useMemo(
     () => stores.filter((store) => store.platform === StorePlatform.PEAR),
     [stores],
   );
 
-  console.log({ selectStore });
-
   const handleSelected = useCallback(
     async (e: SelectChangeEvent<string>) => {
-      console.log({ e });
       await toSelectStore(e.target.value);
     },
     [toSelectStore],
@@ -89,7 +87,7 @@ const SelectStoreInput = () => {
 };
 
 const SelectStore = () => {
-  const { selectStore } = useStore();
+  const { selectStore } = useSelectedStore();
 
   const storePath = useMemo(
     () =>

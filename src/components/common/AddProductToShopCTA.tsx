@@ -3,13 +3,13 @@ import { Button, CircularProgress, Typography } from "@mui/material";
 import { useSelectProduct } from "@atoms/product.atom.ts";
 import useAutoLoading from "@hooks/useAutoLoading.ts";
 import { saveProductToShop } from "@services/product.ts";
-import { useStore } from "@atoms/stores.atom.ts";
+import { useSelectedStore } from "@atoms/stores.atom.ts";
 import { isEmpty } from "ramda";
 import useBaseSnackbar from "@hooks/useBaseSnackbar.ts";
 
 const AddProductToShopCta = () => {
   const { selectedProductIds } = useSelectProduct();
-  const { selectStore } = useStore();
+  const { selectStore } = useSelectedStore();
 
   const { success, error } = useBaseSnackbar();
 
@@ -38,7 +38,7 @@ const AddProductToShopCta = () => {
     } catch {
       error("添加失败");
     }
-  }, [selectedProductIds, selectStore, success]);
+  }, [selectStore?.id, selectedProductIds, success, error]);
 
   const { loading, run: saveProducts } = useAutoLoading<RecordAny>(handleClick);
 
