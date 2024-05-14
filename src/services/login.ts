@@ -39,8 +39,8 @@ export const sendVerificationCode = async (email: string) => {
   return katanaAxios.post("/auth/code", { email });
 };
 
-export const getSelf = async (): Promise<{ user: UserVO }> => {
-  return katanaAxios.get("/merchantUser/self");
+export const getUserInfo = async (): Promise<UserVO> => {
+  return katanaAxios.get("/user/self");
 };
 
 export const getMerchantStoreList = (): Promise<{ items: StoreVO[] }> => {

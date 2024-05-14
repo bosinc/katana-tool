@@ -32,7 +32,7 @@ const LoginBaseInfo = () => {
             whiteSpace: "nowrap",
           }}
         >
-          {`Pear 账号: ${user?.email ?? user.phoneNumber}.xis.asd.asdk@as`}
+          {`Pear 账号: ${user?.email ?? user.phoneNumber}`}
         </Typography>
         <IconButton size={"small"} onClick={logout} title={"退出登录"}>
           <LogoutIcon color={"error"} />

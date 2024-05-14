@@ -4,10 +4,22 @@ import { crx, ManifestV3Export } from "@crxjs/vite-plugin";
 import manifest from "./manifest.json";
 import { resolve } from "path";
 
+import packageJson from "./package.json";
+const { version } = packageJson;
+
+const [major, minor, patch] = version
+  // can only contain digits, dots, or dash
+  .replace(/[^\d.-]+/g, "")
+  // split into version parts
+  .split(/[.-]/);
+
 // https://vitejs.dev/config/
 // @ts-expect-error -- to do
 export default ({ mode }) => {
+  console.log({ mode });
   const env = loadEnv(mode, process.cwd());
+
+  const crxVersion = `${major}.${minor}.${patch}`;
 
   return defineConfig({
     plugins: [
@@ -16,6 +28,7 @@ export default ({ mode }) => {
         manifest: {
           ...manifest,
           name: (env.VITE_PUBLIC_PROJECT_NAME || "Pear Tool") as string,
+          version: crxVersion,
         } as ManifestV3Export,
       }),
     ],
