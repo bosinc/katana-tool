@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && pnpm version major",
-    "build:staging": "tsc && vite build --mode staging && pnpm version patch",
-    "build:release": "tsc && vite build --mode release && pnpm version minor",
+    "build": "pnpm version major && tsc && vite build",
+    "build:staging": "pnpm version patch && tsc && vite build --mode staging",
+    "build:release": "pnpm version minor && tsc && vite build --mode release",
     "build:local": "tsc && vite build --mode local",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
