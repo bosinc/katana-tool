@@ -39,7 +39,7 @@ const LoginFormContent = <T extends RecordAny>({
 
   const handleFormSubmit = useCallback(
     async (values: T) => {
-      // console.log({ values });
+      console.log({ values });
       try {
         const { token } = await (type === "password"
           ? login(values as unknown as LoginRequest)
@@ -63,14 +63,21 @@ const LoginFormContent = <T extends RecordAny>({
         onSubmit={methods.handleSubmit(
           submitForm as unknown as SubmitHandler<T>,
         )}
+        style={{ width: "100%" }}
       >
-        <Stack direction={direction} justifyContent="center" gap={2}>
-          <EmailFormItem direction={direction} />
-          {type === "password" ? (
-            <PasswordFormItem direction={direction} />
-          ) : (
-            <VerifyCodeFormItem direction={direction} />
-          )}
+        <Stack
+          direction={direction}
+          gap={2}
+          sx={{ width: "100%", justifyContent: "space-between" }}
+        >
+          <Stack direction={direction} gap={2}>
+            <EmailFormItem direction={direction} />
+            {type === "password" ? (
+              <PasswordFormItem direction={direction} />
+            ) : (
+              <VerifyCodeFormItem direction={direction} />
+            )}
+          </Stack>
 
           <BaseButton
             label={"登录"}

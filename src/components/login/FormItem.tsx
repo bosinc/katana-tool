@@ -48,10 +48,10 @@ export const VerifyCodeFormItem = ({
       action={<VerificationCodeCTA />}
     >
       <TextField
+        size={"small"}
         sx={{ width: "100%", height: 42 }}
-        InputProps={{
-          sx: { height: 42 },
-        }}
+        inputProps={{ maxLength: 6 }}
+        InputProps={{ sx: { height: 42 } }}
       />
     </BaseFormItem>
   );

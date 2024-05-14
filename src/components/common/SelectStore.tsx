@@ -35,7 +35,7 @@ const SelectStoreInput = () => {
       displayEmpty
       value={selectStore?.id ?? ""}
       onChange={handleSelected}
-      sx={{ width: 220, border: "none" }}
+      sx={{ width: "100%", border: "none", minWidth: 220 }}
       placeholder={"请选择店铺"}
       renderValue={(selectValue) => {
         const store = find((store) => store.id === selectValue, stores);
@@ -86,21 +86,38 @@ const SelectStoreInput = () => {
   );
 };
 
-const SelectStore = () => {
+const SelectStore = ({
+  direction = "row",
+}: {
+  direction?: "row" | "column";
+}) => {
   const { selectStore } = useSelectedStore();
 
   const storePath = useMemo(
-    () =>
-      selectStore?.id ? `${STORE_PREFIX}/${selectStore?.id}/products` : "",
+    () => (selectStore?.id ? `${STORE_PREFIX}/${selectStore?.id}` : ""),
     [selectStore],
   );
 
   return (
-    <Stack direction={"row"} alignItems={"center"} gap={1}>
-      <Typography variant="body2" fontWeight={600}>
-        店铺
-      </Typography>
-      <SelectStoreInput />
+    <Stack
+      direction={direction}
+      alignItems={"center"}
+      gap={1}
+      sx={{ width: "100%" }}
+    >
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        gap={1}
+        sx={{ width: direction === "row" ? "auto" : "100%" }}
+      >
+        <Typography variant="body2" fontWeight={600}>
+          店铺
+        </Typography>
+        <Stack sx={{ flex: 1 }}>
+          <SelectStoreInput />
+        </Stack>
+      </Stack>
       {selectStore?.id ? (
         <Typography
           component={"a"}

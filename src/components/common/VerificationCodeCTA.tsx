@@ -5,7 +5,7 @@ import { sendVerificationCode } from "@services/login.ts";
 import useAutoLoading from "@hooks/useAutoLoading.ts";
 import useBaseSnackbar from "@hooks/useBaseSnackbar.ts";
 
-const VerificationCodeCta = () => {
+const VerificationCodeCTA = () => {
   const { trigger, getValues } = useFormContext();
   const { error, success } = useBaseSnackbar();
 
@@ -58,4 +58,4 @@ const VerificationCodeCta = () => {
   );
 };
 
-export default VerificationCodeCta;
+export default VerificationCodeCTA;

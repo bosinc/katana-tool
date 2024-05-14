@@ -17,7 +17,13 @@ const LoginForm = () => {
     [error, success],
   );
 
-  return <LoginFormContent scheme={loginScheme} onFinished={handleSubmit} />;
+  return (
+    <LoginFormContent
+      scheme={loginScheme}
+      onFinished={handleSubmit}
+      type={"code"}
+    />
+  );
 };
 
 export default LoginForm;

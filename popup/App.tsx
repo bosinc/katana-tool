@@ -2,48 +2,34 @@ import { CssBaseline, Stack, Typography } from "@mui/material";
 import { useAuth } from "@atoms/user.atom.ts";
 import LoginBaseInfo from "./component/LoginBaseInfo.tsx";
 import TitleHeader from "@components/common/TitleHeader.tsx";
-import BaseButton from "@components/common/BaseButton.tsx";
-import { useCallback } from "react";
+import ToLoginCTA from "@components/login/ToLoginCTA.tsx";
 
 const App = () => {
   const { isLogin } = useAuth();
 
-  const toLogin = useCallback(() => {
-    const loginPath = chrome.runtime.getURL("/login/index.html");
-    window.open(loginPath, "_blank");
-  }, []);
-
   return (
     <>
       <CssBaseline />
-      <Stack sx={{ width: "100%", height: 540 }}>
+      <Stack sx={{ width: "100%", height: 420 }}>
         <TitleHeader />
         <Stack
           sx={{
             flex: 1,
             width: "100%",
-            p: 4,
+            p: 2,
           }}
         >
           {!isLogin ? (
             <Stack
-              justifyContent={"center"}
+              justifyContent={"flex-start"}
               alignItems={"center"}
               gap={2}
-              sx={{ width: "100%", height: "100%" }}
+              sx={{ width: "100%", height: "100%", pt: 4 }}
             >
               <Typography fontSize={14} fontWeight={700}>
                 您还没有登录
               </Typography>
-              <BaseButton
-                onClick={toLogin}
-                label={"去登录"}
-                sx={{
-                  width: "100%",
-                  textTransform: "unset",
-                  height: 42,
-                }}
-              />
+              <ToLoginCTA type={"link"} />
             </Stack>
           ) : (
             <LoginBaseInfo />

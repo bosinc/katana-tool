@@ -7,7 +7,7 @@ import { isEmpty } from "ramda";
 import useBaseSnackbar from "@hooks/useBaseSnackbar.ts";
 import BaseButton from "@components/common/BaseButton.tsx";
 
-const AddProductToShopCta = () => {
+const AddProductToShopCTA = () => {
   const { selectedProductIds } = useSelectProduct();
   const { selectStore } = useSelectedStore();
 
@@ -48,10 +48,10 @@ const AddProductToShopCta = () => {
       variant={"contained"}
       sx={{ textTransform: "unset", width: 180, height: 36 }}
       onClick={saveProducts}
-      label={"添加到商品库"}
+      label={`添加到商品库${selectedProductIds.length ? ` ( ${selectedProductIds.length} )` : ""}`}
       loading={loading}
     />
   );
 };
 
-export default AddProductToShopCta;
+export default AddProductToShopCTA;

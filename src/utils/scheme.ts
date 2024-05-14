@@ -7,5 +7,5 @@ export const loginScheme = yup.object().shape({
 
 export const codeLoginSchema = yup.object().shape({
   email: yup.string().email().required(),
-  code: yup.string().required(),
+  code: yup.string().min(6).max(6).required().length(6),
 });
