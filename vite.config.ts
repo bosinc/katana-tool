@@ -43,7 +43,7 @@ export default ({ mode }) => {
       },
     },
     build: {
-      outDir: `${mode}_v${crxVersion}`,
+      outDir: mode !== "production" ? `${mode}_v${crxVersion}` : "dist",
       rollupOptions: {
         input: {
           main: resolve(__dirname, "index.html"),

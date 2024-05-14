@@ -41,5 +41,5 @@ yarn.lock
 # vercel
 .vercel
 
-staging-*
-
+staging_v*
+release_v*
