@@ -18,7 +18,7 @@ const LoginAccount = () => {
     >
       <Stack direction={"row"} alignItems={"center"} gap={2}>
         <Typography variant="body2" fontWeight={600}>
-          {`Pear 账号: ${user?.email}`}
+          {`Pear 账号: ${user?.email ?? user.phoneNumber}`}
         </Typography>
         <Button
           variant={"contained"}

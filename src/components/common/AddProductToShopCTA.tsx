@@ -1,11 +1,11 @@
 import { useCallback } from "react";
-import { Button, CircularProgress, Typography } from "@mui/material";
 import { useSelectProduct } from "@atoms/product.atom.ts";
 import useAutoLoading from "@hooks/useAutoLoading.ts";
 import { saveProductToShop } from "@services/product.ts";
 import { useSelectedStore } from "@atoms/stores.atom.ts";
 import { isEmpty } from "ramda";
 import useBaseSnackbar from "@hooks/useBaseSnackbar.ts";
+import BaseButton from "@components/common/BaseButton.tsx";
 
 const AddProductToShopCta = () => {
   const { selectedProductIds } = useSelectProduct();
@@ -43,20 +43,14 @@ const AddProductToShopCta = () => {
   const { loading, run: saveProducts } = useAutoLoading<RecordAny>(handleClick);
 
   return (
-    <Button
+    <BaseButton
       disabled={loading || selectedProductIds.length === 0}
       variant={"contained"}
       sx={{ textTransform: "unset", width: 180, height: 36 }}
       onClick={saveProducts}
-    >
-      {loading ? (
-        <CircularProgress size={14} />
-      ) : (
-        <Typography variant={"body2"} fontWeight={600}>
-          添加到商品库
-        </Typography>
-      )}
-    </Button>
+      label={"添加到商品库"}
+      loading={loading}
+    />
   );
 };
 

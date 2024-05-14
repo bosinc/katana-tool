@@ -1,15 +1,15 @@
 import { LoginRequest } from "@services/login.ts";
 import { loginScheme } from "@utils/scheme.ts";
 import { useCallback, useEffect, useState } from "react";
-import LoginFormContent from "@components/common/LoginFormContent.tsx";
 import { Alert, Collapse, Stack } from "@mui/material";
 import { isEmpty } from "ramda";
+import LoginFormContent from "@components/common/LoginFormContent.tsx";
 
 const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleFailed = useCallback(() => {
-    setErrorMessage("账号或密码不正确，请重新登录");
+  const handleSubmit = useCallback((isSuccess: boolean) => {
+    setErrorMessage(isSuccess ? "" : "账号或密码不正确，请重新登录");
   }, []);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const LoginForm = () => {
       </Collapse>
       <LoginFormContent<LoginRequest>
         direction={"column"}
-        onFailed={handleFailed}
+        onFinished={handleSubmit}
         scheme={loginScheme}
       />
     </Stack>

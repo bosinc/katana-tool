@@ -1,32 +1,23 @@
 import { CssBaseline, Stack, Typography } from "@mui/material";
 import { useAuth } from "@atoms/user.atom.ts";
 import LoginBaseInfo from "./component/LoginBaseInfo.tsx";
-import LoginForm from "./component/LoginForm.tsx";
-import { PROJECT_NAME } from "@utils/common.ts";
+import TitleHeader from "@components/common/TitleHeader.tsx";
+import BaseButton from "@components/common/BaseButton.tsx";
+import { useCallback } from "react";
 
 const App = () => {
   const { isLogin } = useAuth();
+
+  const toLogin = useCallback(() => {
+    const loginPath = chrome.runtime.getURL("/login/index.html");
+    window.open(loginPath, "_blank");
+  }, []);
 
   return (
     <>
       <CssBaseline />
       <Stack sx={{ width: "100%", height: 540 }}>
-        <Stack
-          sx={{
-            py: 2,
-            alignItems: "center",
-            borderBottom: "1px solid #f2f2fe",
-          }}
-        >
-          <Typography
-            variant="body1"
-            fontSize={18}
-            fontWeight={600}
-            component="h2"
-          >
-            {PROJECT_NAME}
-          </Typography>
-        </Stack>
+        <TitleHeader />
         <Stack
           sx={{
             flex: 1,
@@ -34,7 +25,29 @@ const App = () => {
             p: 4,
           }}
         >
-          {!isLogin ? <LoginForm /> : <LoginBaseInfo />}
+          {!isLogin ? (
+            <Stack
+              justifyContent={"center"}
+              alignItems={"center"}
+              gap={2}
+              sx={{ width: "100%", height: "100%" }}
+            >
+              <Typography fontSize={14} fontWeight={700}>
+                您还没有登录
+              </Typography>
+              <BaseButton
+                onClick={toLogin}
+                label={"去登录"}
+                sx={{
+                  width: "100%",
+                  textTransform: "unset",
+                  height: 42,
+                }}
+              />
+            </Stack>
+          ) : (
+            <LoginBaseInfo />
+          )}
         </Stack>
       </Stack>
     </>

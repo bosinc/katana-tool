@@ -34,6 +34,7 @@ export default ({ mode }) => {
         input: {
           main: resolve(__dirname, "index.html"),
           popup: resolve(__dirname, "popup/index.html"),
+          login: resolve(__dirname, "login/index.html"),
         },
       },
     },
