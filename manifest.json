@@ -16,13 +16,14 @@
     {
       "matches": ["http://*/*", "https://*/*"],
       "js": ["src/content_script.ts"],
-      "css": ["custom.css"]
+      "css": ["custom.css"],
+      "run_at": "document_start"
     }
   ],
   "background": {
     "service_worker": "src/service_worker.ts",
     "type": "module"
   },
-  "permissions": ["contextMenus", "storage", "cookies"],
+  "permissions": ["contextMenus", "storage", "cookies", "webRequest"],
   "host_permissions": ["https://*.katana-api.1m.app/", "https://*.pear.us/"]
 }

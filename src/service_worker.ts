@@ -1,58 +1,176 @@
 import { commonSyncStorage } from "./utils/storage";
-import { DEFAULT_MENU_ITEM_ID } from "./utils/common.ts";
 import { MessageActionType, StorageKeys } from "./enum.ts";
+import { StoreVO } from "./types";
+import {
+  addProductToStore,
+  checkLogin,
+  clearStoreMenus,
+  createStoreMenu,
+  getServiceStoreList,
+  initContextMenus,
+} from "@utils/serviceUtil.ts";
+import {
+  cookieUrl,
+  DOMAIN_WEB_URL,
+  PROJECT_TOKEN_NAME,
+} from "@utils/common.ts";
+import { clone } from "ramda";
 
 console.log("service worker init!!!");
 
 type ServiceWorkerData = {
   windows: chrome.windows.Window | null;
   baseUrl?: string;
+  stores: StoreVO[];
+  selectedStoreId?: string;
 };
-
 const data: ServiceWorkerData = {
   windows: null,
+  stores: [],
 };
-const dataHandler: ProxyHandler<ServiceWorkerData> = {};
+
+const dataHandler: ProxyHandler<ServiceWorkerData> = {
+  get(target: ServiceWorkerData, p: keyof ServiceWorkerData) {
+    return target[p];
+  },
+  set(target: ServiceWorkerData, p: keyof ServiceWorkerData, newValue) {
+    console.log({ newValue, target, p });
+
+    if (p === "stores") {
+      const oldValue = clone(target[p]);
+      clearStoreMenus(oldValue).then(() => {
+        createStoreMenu(newValue, "select_stores").then(() => {});
+      });
+    }
+    if (p === "selectedStoreId") {
+      commonSyncStorage
+        .set(StorageKeys.SELECT_STORE_ID, newValue)
+        .then(() => {});
+    }
+    if (p === "baseUrl") {
+      commonSyncStorage.set(StorageKeys.BASE_URL, newValue).then(() => {});
+    }
+    target[p] = newValue;
+    return true;
+  },
+};
 const dataProxy = new Proxy(data, dataHandler);
 
-chrome.contextMenus.onClicked.addListener(async (info, tab) => {
+async function addProduct(info: chrome.contextMenus.OnClickData) {
+  const url = new URL(info.linkUrl ?? info.pageUrl);
+  console.log("url: ", url, url.pathname);
+  if (url.host === "www.aliexpress.com") {
+    const matchData = url.pathname.match(/\/([^/.]+)\./);
+    if (matchData) {
+      const productId = matchData[1];
+      if (dataProxy.selectedStoreId) {
+        const res = await addProductToStore({
+          merchantId: dataProxy.selectedStoreId,
+          productIds: [productId],
+        });
+        console.log({ productId, res });
+      }
+    }
+  }
+}
+
+async function onContextMenusClick(info: chrome.contextMenus.OnClickData) {
   dataProxy.baseUrl = info.srcUrl;
   await commonSyncStorage.set(StorageKeys.BASE_URL, info.srcUrl);
-  switch (info.menuItemId) {
-    case "iframe": {
-      if (tab?.id) {
-        await chrome.tabs.sendMessage(tab.id, { action: "insertIframe" });
-      }
-      break;
+
+  if (info.menuItemId === "window") {
+    if (!dataProxy.windows) {
+      dataProxy.windows = await chrome.windows.create({
+        url: "index.html",
+        type: "popup",
+        width: 1280,
+        height: 960,
+        top: 100,
+        left: 100,
+      });
+    } else {
+      await chrome.runtime.sendMessage({
+        action: MessageActionType.IMAGE_ACTION,
+        data: dataProxy.baseUrl,
+      });
     }
-    case "window": {
-      if (!dataProxy.windows) {
-        dataProxy.windows = await chrome.windows.create({
-          url: "index.html",
-          type: "popup",
-          width: 1280,
-          height: 960,
-          top: 100,
-          left: 100,
-        });
-      } else {
-        await chrome.runtime.sendMessage({
-          action: MessageActionType.IMAGE_ACTION,
-          data: dataProxy.baseUrl,
-        });
-      }
-      break;
+  } else if (info.menuItemId.toString().startsWith("store_item_")) {
+    const storeId = info.menuItemId.toString().split("_").pop();
+    if (storeId) {
+      dataProxy.selectedStoreId = storeId;
     }
-    default:
+    await addProduct(info);
+  } else if (info.menuItemId === "pear_login") {
+    await chrome.tabs.create({
+      url: chrome.runtime.getURL("login/index.html"),
+    });
+  } else if (info.menuItemId === "pear_logout") {
+    await chrome.cookies.remove({
+      url: cookieUrl,
+      name: PROJECT_TOKEN_NAME,
+    });
+    dataProxy.selectedStoreId = "";
+  } else if (info.menuItemId === "one_click_add") {
+    console.log({ info });
+    await addProduct(info);
+  } else if (info.menuItemId === "pear_refresh_stores") {
+    await createStoreMenuItem();
   }
-});
+}
+
+async function createStoreMenuItem() {
+  const isLogin = await checkLogin();
+  const selectStoreId = await commonSyncStorage.get(
+    StorageKeys.SELECT_STORE_ID,
+  );
+  if (isLogin) {
+    const { storeList } = await getServiceStoreList();
+    if (storeList && storeList.length > 0) {
+      chrome.contextMenus.update("separator_2", { visible: true });
+      if (
+        !selectStoreId ||
+        storeList.findIndex((item) => item.id === selectStoreId) < 0
+      ) {
+        dataProxy.selectedStoreId = storeList[0].id;
+      }
+      dataProxy.stores = storeList;
+    } else {
+      chrome.contextMenus.update("separator_2", { visible: false });
+    }
+  }
+}
+
+async function createSecondStoreMenuItem() {
+  chrome.contextMenus.create({
+    title: "退出登录",
+    contexts: ["all"],
+    id: "pear_logout",
+    parentId: "select_stores",
+  });
+  chrome.contextMenus.create({
+    title: "刷新店铺信息",
+    contexts: ["all"],
+    id: "pear_refresh_stores",
+    parentId: "select_stores",
+  });
+  await createStoreMenuItem();
+}
+
+async function updateContextMenus() {
+  const isLogin = await checkLogin();
+  chrome.contextMenus.update("pear_login", { visible: !isLogin });
+  chrome.contextMenus.update("select_stores", { visible: isLogin });
+  await createStoreMenuItem();
+}
+
+chrome.contextMenus.onClicked.addListener(onContextMenusClick);
 
 chrome.runtime.onInstalled.addListener(async () => {
-  chrome.contextMenus.create({
-    title: "在AliExpress中搜索商品",
-    contexts: ["image"],
-    id: DEFAULT_MENU_ITEM_ID,
-  });
+  dataProxy.selectedStoreId = await commonSyncStorage.get(
+    StorageKeys.SELECT_STORE_ID,
+  );
+  await initContextMenus();
+  await createSecondStoreMenuItem();
 });
 
 chrome.windows.onRemoved.addListener(async () => {
@@ -66,5 +184,14 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
       `Storage key "${key}" in namespace "${namespace}" changed.`,
       `Old value was "${oldValue}", new value is "${newValue}".`,
     );
+  }
+});
+
+chrome.cookies.onChanged.addListener(async (changes) => {
+  if (
+    changes.cookie.domain.includes(DOMAIN_WEB_URL) &&
+    changes.cookie.name === PROJECT_TOKEN_NAME
+  ) {
+    await updateContextMenus();
   }
 });

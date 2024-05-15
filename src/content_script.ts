@@ -1,6 +1,6 @@
 const iframe = document.createElement("iframe");
 
-chrome.runtime.onMessage.addListener((message) => {
+chrome.runtime.onMessage.addListener(async (message) => {
   if (message.action === "insertIframe") {
     iframe.src = chrome.runtime.getURL("index.html");
     iframe.style.width = "100%";
@@ -25,18 +25,5 @@ chrome.runtime.onMessage.addListener((message) => {
   if (message.action === "removeIframe") {
     document.body.style.overflow = "unset";
     document.body.removeChild(iframe);
-  }
-});
-
-document.addEventListener("contextmenu", (event) => {
-  const mouseX = event.clientX;
-  const mouseY = event.clientY;
-
-  const currentElements = document.elementsFromPoint(mouseX, mouseY);
-  console.log(currentElements);
-  for (const element of currentElements) {
-    if (element.tagName.toLowerCase() === "img") {
-      console.log("img ===> ", (element as HTMLImageElement).currentSrc);
-    }
   }
 });

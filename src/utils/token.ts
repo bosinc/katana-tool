@@ -34,7 +34,7 @@ const tokenUtil = {
 
   async removeToken(key = PROJECT_TOKEN_NAME) {
     this.tokenMap = {};
-    await cookieStorage.set(key as unknown as string, "", {
+    await cookieStorage.set(key, "", {
       expirationDate: -1,
     });
   },
