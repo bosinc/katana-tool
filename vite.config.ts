@@ -20,6 +20,9 @@ export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd());
 
   const crxVersion = `${major}.${minor}.${patch}`;
+  const outDirName = ["staging", "release"].includes(mode)
+    ? `${mode}_v${crxVersion}`
+    : "dist";
 
   return defineConfig({
     plugins: [
@@ -43,7 +46,7 @@ export default ({ mode }) => {
       },
     },
     build: {
-      outDir: mode !== "production" ? `${mode}_v${crxVersion}` : "dist",
+      outDir: outDirName,
       rollupOptions: {
         input: {
           main: resolve(__dirname, "index.html"),

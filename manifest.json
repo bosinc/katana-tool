@@ -24,5 +24,5 @@
     "type": "module"
   },
   "permissions": ["contextMenus", "storage", "cookies"],
-  "host_permissions": ["https://*.katana-api.1m.app/", "https://staging.merchant.pear.us/", "http://*/*", "https://*/*"]
+  "host_permissions": ["https://*.katana-api.1m.app/", "https://*.pear.us/"]
 }
