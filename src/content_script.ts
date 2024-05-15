@@ -27,3 +27,16 @@ chrome.runtime.onMessage.addListener((message) => {
     document.body.removeChild(iframe);
   }
 });
+
+document.addEventListener("contextmenu", (event) => {
+  const mouseX = event.clientX;
+  const mouseY = event.clientY;
+
+  const currentElements = document.elementsFromPoint(mouseX, mouseY);
+  console.log(currentElements);
+  for (const element of currentElements) {
+    if (element.tagName.toLowerCase() === "img") {
+      console.log("img ===> ", (element as HTMLImageElement).currentSrc);
+    }
+  }
+});

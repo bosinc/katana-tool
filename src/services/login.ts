@@ -7,6 +7,11 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface CodeLoginResponse {
+  email: string;
+  code: string;
+}
+
 const pwdMd5 = (pwd: string) => {
   return [...md5(pwd)].reduce(
     (ac, char, index) => ac + (index % 2 ? char.toUpperCase() : char),
@@ -19,13 +24,23 @@ export const login = async (data: LoginRequest) => {
     `/auth/merchant-login`,
     {
       ...data,
-      password: pwdMd5(data.password),
+      password: pwdMd5(data.password ?? ""),
     },
   );
 };
 
-export const getSelf = async (): Promise<{ user: UserVO }> => {
-  return katanaAxios.get("/merchantUser/self");
+export const loginByCode = async (data: CodeLoginResponse) => {
+  return katanaAxios.post<CodeLoginResponse, { token: string }>(`/auth/login`, {
+    ...data,
+  });
+};
+
+export const sendVerificationCode = async (email: string) => {
+  return katanaAxios.post("/auth/code", { email });
+};
+
+export const getUserInfo = async (): Promise<UserVO> => {
+  return katanaAxios.get("/user/self");
 };
 
 export const getMerchantStoreList = (): Promise<{ items: StoreVO[] }> => {

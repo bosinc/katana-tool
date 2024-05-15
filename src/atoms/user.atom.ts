@@ -3,11 +3,12 @@ import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useCallback, useEffect, useRef } from "react";
 import tokenUtil from "@utils/token.ts";
 import { isEmpty } from "ramda";
-import type { TokenState } from "../types";
+import type { UserVO } from "../types";
 import { commonSyncStorage } from "@utils/storage.ts";
 import { StorageKeys } from "../enum.ts";
+import { getUserInfo } from "@services/login.ts";
 
-export const userAtom = atom<Partial<TokenState>>({} as Partial<TokenState>);
+export const userAtom = atom<Partial<UserVO>>({} as Partial<UserVO>);
 
 export const tokenAtom = atom<string | undefined>(undefined);
 
@@ -46,8 +47,9 @@ export const useUser = () => {
     if (initStatusRef.current) return;
     initStatusRef.current = true;
     const tokenUser = await tokenUtil.parse();
-    console.log({ tokenUser });
     updateUser(tokenUser);
+    const user = await getUserInfo();
+    updateUser(user);
   }, [updateUser]);
 
   useEffect(() => {
@@ -59,7 +61,7 @@ export const useUser = () => {
   }, [token, initUser]);
 
   useEffect(() => {
-    if (!user?.userId) {
+    if (!user?.id) {
       initUser().then(() => {
         initStatusRef.current = false;
       });

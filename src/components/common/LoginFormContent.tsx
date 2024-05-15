@@ -1,26 +1,36 @@
 import { useCallback, useRef } from "react";
-import FormItem from "../login/FormItem.tsx";
-import { Button, Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import useAutoLoading from "@hooks/useAutoLoading.ts";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { login, LoginRequest } from "@services/login.ts";
+import {
+  CodeLoginResponse,
+  login,
+  loginByCode,
+  LoginRequest,
+} from "@services/login.ts";
 import tokenUtil from "@utils/token.ts";
 import { useAuth } from "@atoms/user.atom.ts";
+import BaseButton from "@components/common/BaseButton.tsx";
+import {
+  EmailFormItem,
+  PasswordFormItem,
+  VerifyCodeFormItem,
+} from "@components/login/FormItem.tsx";
 
 interface LoginFormContentProps<T extends RecordAny> {
   direction?: "row" | "column";
-  onSubmit?: () => void;
-  onFailed?: (error: Error) => void;
   scheme: yup.ObjectSchema<T>;
+  type?: "password" | "code";
+  onFinished?: (isSuccess: boolean) => void;
 }
 
-const LoginFormContent = <T extends LoginRequest>({
+const LoginFormContent = <T extends RecordAny>({
   direction = "row",
-  onSubmit,
-  onFailed,
   scheme,
+  type = "password",
+  onFinished,
 }: LoginFormContentProps<T>) => {
   // @ts-expect-error -- to do
   const methods = useForm<T>({ resolver: yupResolver(scheme) });
@@ -29,16 +39,19 @@ const LoginFormContent = <T extends LoginRequest>({
 
   const handleFormSubmit = useCallback(
     async (values: T) => {
+      console.log({ values });
       try {
-        const { token } = await login(values);
+        const { token } = await (type === "password"
+          ? login(values as unknown as LoginRequest)
+          : loginByCode(values as unknown as CodeLoginResponse));
         await tokenUtil.save({ token });
         await checkLogin();
-        onSubmit?.();
+        onFinished?.(true);
       } catch (error) {
-        onFailed?.(error as Error);
+        onFinished?.(false);
       }
     },
-    [onFailed, onSubmit, checkLogin],
+    [checkLogin, onFinished, type],
   );
 
   const { loading, run: submitForm } = useAutoLoading<T>(handleFormSubmit);
@@ -50,36 +63,33 @@ const LoginFormContent = <T extends LoginRequest>({
         onSubmit={methods.handleSubmit(
           submitForm as unknown as SubmitHandler<T>,
         )}
+        style={{ width: "100%" }}
       >
-        <Stack direction={direction} justifyContent="center" gap={2}>
-          <FormItem
-            label={"Pear账号"}
-            name={"email"}
-            rules={{ required: true }}
-            direction={direction}
-            type="email"
-          />
-          <FormItem
-            label={"密码"}
-            name={"password"}
-            type={"password"}
-            rules={{ required: true }}
-            direction={direction}
-          />
-          <Button
+        <Stack
+          direction={direction}
+          gap={2}
+          sx={{ width: "100%", justifyContent: "space-between" }}
+        >
+          <Stack direction={direction} gap={2}>
+            <EmailFormItem direction={direction} />
+            {type === "password" ? (
+              <PasswordFormItem direction={direction} />
+            ) : (
+              <VerifyCodeFormItem direction={direction} />
+            )}
+          </Stack>
+
+          <BaseButton
+            label={"登录"}
+            type={"submit"}
+            disabled={loading}
+            loading={loading}
             sx={{
               textTransform: "unset",
               width: direction === "row" ? 180 : "100%",
-              height: 36,
+              height: 42,
             }}
-            variant="contained"
-            type="submit"
-            disabled={loading}
-          >
-            <Typography variant={"body2"} fontWeight={600}>
-              登录
-            </Typography>
-          </Button>
+          />
         </Stack>
       </form>
     </FormProvider>

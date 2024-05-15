@@ -29,4 +29,4 @@ export const DEFAULT_MENU_ITEM_ID =
 export const PROJECT_NAME =
   import.meta.env.VITE_PUBLIC_PROJECT_NAME || "Pear Tool";
 
-export const STORE_PREFIX = `https://${DOMAIN_WEB_URL}`;
+export const STORE_PREFIX = `https://${DOMAIN_WEB_URL}/sell/business`;
