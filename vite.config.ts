@@ -22,7 +22,9 @@ export default ({ mode }) => {
   const crxVersion = `${major}.${minor}.${patch}`;
   const outDirName = ["staging", "release"].includes(mode)
     ? `${mode}_v${crxVersion}`
-    : "dist";
+    : mode === "production"
+      ? env.VITE_PUBLIC_PROJECT_NAME
+      : "dist";
 
   return defineConfig({
     plugins: [
@@ -30,7 +32,7 @@ export default ({ mode }) => {
       crx({
         manifest: {
           ...manifest,
-          name: (env.VITE_PUBLIC_PROJECT_NAME || "Pear Tool") as string,
+          name: (env.VITE_PUBLIC_PROJECT_NAME || "AliExpress Helper") as string,
           version: crxVersion,
         } as ManifestV3Export,
       }),
