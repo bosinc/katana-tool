@@ -15,6 +15,7 @@ import {
   PROJECT_TOKEN_NAME,
 } from "@utils/common.ts";
 import { clone } from "ramda";
+import { notification } from "@utils/notification.ts";
 
 console.log("service worker init!!!");
 
@@ -34,8 +35,6 @@ const dataHandler: ProxyHandler<ServiceWorkerData> = {
     return target[p];
   },
   set(target: ServiceWorkerData, p: keyof ServiceWorkerData, newValue) {
-    console.log({ newValue, target, p });
-
     if (p === "stores") {
       const oldValue = clone(target[p]);
       clearStoreMenus(oldValue).then(() => {
@@ -58,7 +57,6 @@ const dataProxy = new Proxy(data, dataHandler);
 
 async function addProduct(info: chrome.contextMenus.OnClickData) {
   const url = new URL(info.linkUrl ?? info.pageUrl);
-  console.log("url: ", url, url.pathname);
   if (url.host === "www.aliexpress.com") {
     const matchData = url.pathname.match(/\/([^/.]+)\./);
     if (matchData) {
@@ -68,7 +66,15 @@ async function addProduct(info: chrome.contextMenus.OnClickData) {
           merchantId: dataProxy.selectedStoreId,
           productIds: [productId],
         });
-        console.log({ productId, res });
+        const failCount = res.failed.length;
+        const duplicateCount = res.duplicate.length;
+        let message = "商品添加成功";
+        if (failCount > 0) {
+          message = "商品添加失败";
+        } else if (duplicateCount > 0) {
+          message = "商品已存在该店铺中";
+        }
+        notification.message(message);
       }
     }
   }
@@ -98,6 +104,7 @@ async function onContextMenusClick(info: chrome.contextMenus.OnClickData) {
     const storeId = info.menuItemId.toString().split("_").pop();
     if (storeId) {
       dataProxy.selectedStoreId = storeId;
+      notification.message("默认店铺已更换");
     }
     await addProduct(info);
   } else if (info.menuItemId === "pear_login") {
@@ -110,11 +117,12 @@ async function onContextMenusClick(info: chrome.contextMenus.OnClickData) {
       name: PROJECT_TOKEN_NAME,
     });
     dataProxy.selectedStoreId = "";
+    notification.message("账号已退出登录");
   } else if (info.menuItemId === "one_click_add") {
-    console.log({ info });
     await addProduct(info);
   } else if (info.menuItemId === "pear_refresh_stores") {
     await createStoreMenuItem();
+    notification.message("店铺信息已刷新");
   }
 }
 

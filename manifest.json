@@ -24,6 +24,6 @@
     "service_worker": "src/service_worker.ts",
     "type": "module"
   },
-  "permissions": ["contextMenus", "storage", "cookies", "webRequest"],
+  "permissions": ["contextMenus", "storage", "cookies", "webRequest", "notifications"],
   "host_permissions": ["https://*.katana-api.1m.app/", "https://*.pear.us/"]
 }
