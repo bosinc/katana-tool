@@ -57,7 +57,7 @@ const dataProxy = new Proxy(data, dataHandler);
 
 async function addProduct(info: chrome.contextMenus.OnClickData) {
   const url = new URL(info.linkUrl ?? info.pageUrl);
-  if (url.host === "www.aliexpress.com") {
+  if (url.host === "www.aliexpress.com" && url.pathname.startsWith("/item/")) {
     const matchData = url.pathname.match(/\/([^/.]+)\./);
     if (matchData) {
       const productId = matchData[1];
@@ -77,6 +77,8 @@ async function addProduct(info: chrome.contextMenus.OnClickData) {
         notification.message(message);
       }
     }
+  } else {
+    notification.message("当前链接不是商品");
   }
 }
 
