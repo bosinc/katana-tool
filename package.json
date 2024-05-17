@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "pnpm version major -m 'chore: version to %s' && tsc && vite build",
+    "build": "pnpm version minor -m 'chore: version to %s' && tsc && vite build",
     "build:staging": "pnpm version patch -m 'chore: version to %s' && tsc && vite build --mode staging",
-    "build:release": "pnpm version minor -m 'chore: version to %s' && tsc && vite build --mode release",
+    "build:release": "pnpm version patch -m 'chore: version to %s' && tsc && vite build --mode release",
     "build:local": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
