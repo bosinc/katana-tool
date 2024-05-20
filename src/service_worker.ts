@@ -37,7 +37,12 @@ const dataHandler: ProxyHandler<ServiceWorkerData> = {
   set(target: ServiceWorkerData, p: keyof ServiceWorkerData, newValue) {
     if (p === "stores") {
       const oldValue = clone(target[p]);
+      console.log("clear stores: ", oldValue, newValue);
       clearStoreMenus(oldValue).then(() => {
+        if (chrome.runtime.lastError) {
+          console.log("Error: ", chrome.runtime.lastError);
+        }
+        console.log("clear context menus successfully");
         createStoreMenu(newValue, "select_stores").then(() => {});
       });
     }

@@ -59,13 +59,25 @@ export const addProductToStore = async (requestData: {
   }
 };
 
-export const clearStoreMenus = async (list: StoreVO[]) => {
-  return await Promise.all(
-    list.map((item) => {
-      const menuId = `store_item_${item.id}`;
-      return chrome.contextMenus.remove(menuId);
-    }),
-  );
+export const clearStoreMenus = (list: StoreVO[]) => {
+  return new Promise<void>((resolve, reject) => {
+    if (Array.isArray(list) && list.length > 0) {
+      console.log("start clear");
+      list.forEach((item, index, array) => {
+        const menuId = `store_item_${item.id}`;
+        chrome.contextMenus.remove(menuId, function () {
+          if (chrome.runtime.lastError) {
+            console.log("Error removing menu item: ", chrome.runtime.lastError);
+            reject(chrome.runtime.lastError);
+          } else if (index === array.length - 1) {
+            resolve();
+          }
+        });
+      });
+    } else {
+      resolve();
+    }
+  });
 };
 
 export const createStoreMenu = async (
@@ -75,16 +87,35 @@ export const createStoreMenu = async (
   const selectStoreId = await commonSyncStorage.get(
     StorageKeys.SELECT_STORE_ID,
   );
-  list.forEach((item: StoreVO) => {
-    const menuId = `store_item_${item.id}`;
-    chrome.contextMenus.create({
-      title: `添加到 - ${item.storeName}`,
-      contexts: ["all"],
-      id: menuId,
-      parentId,
-      checked: item.id === selectStoreId,
-      type: "radio",
-    });
+  return new Promise<void>((resolve, reject) => {
+    if (Array.isArray(list)) {
+      list.forEach((item: StoreVO, index, array) => {
+        const menuId = `store_item_${item.id}`;
+        chrome.contextMenus.create(
+          {
+            title: `添加到 - ${item.storeName}`,
+            contexts: ["all"],
+            id: menuId,
+            parentId,
+            checked: item.id === selectStoreId,
+            type: "radio",
+          },
+          function () {
+            if (chrome.runtime.lastError) {
+              console.log(
+                "Error creating menu item: ",
+                chrome.runtime.lastError,
+              );
+              reject(chrome.runtime.lastError);
+            } else if (index === array.length - 1) {
+              resolve();
+            }
+          },
+        );
+      });
+    } else {
+      resolve();
+    }
   });
 };
 
